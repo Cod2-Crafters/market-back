@@ -8,6 +8,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -26,7 +27,16 @@ public class Comment {
 	@ManyToOne(fetch = LAZY)
 	private Post post;
 
-	public void setPost(Post post){
+	private String content;
+
+	public void setPost(Post post) {
 		this.post = post;
+	}
+
+	@Builder
+	public Comment(Member commenter, Post post, String content) {
+		this.commenter = commenter;
+		this.post = post;
+		this.content = content;
 	}
 }
