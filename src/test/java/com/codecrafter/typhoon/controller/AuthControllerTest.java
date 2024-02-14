@@ -20,7 +20,7 @@ import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.request.EmailPasswordRequest;
 import com.codecrafter.typhoon.domain.request.SignupRequest;
 import com.codecrafter.typhoon.domain.response.TokenResponse;
-import com.codecrafter.typhoon.repository.MemberRepository;
+import com.codecrafter.typhoon.repository.member.MemberRepository;
 import com.codecrafter.typhoon.service.AuthService;
 import com.codecrafter.typhoon.service.JWTService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,12 +41,10 @@ class AuthControllerTest {
 	@Autowired
 	private MemberRepository memberRepository;
 
-
-
 	@Autowired
-	private  JWTService jwtService;
+	private JWTService jwtService;
 
-	SignupRequest createMockSignup(){
+	SignupRequest createMockSignup() {
 		SignupRequest signupRequest = new SignupRequest("abcd@abcd.com",
 			"password",
 			"realName",
@@ -70,8 +68,8 @@ class AuthControllerTest {
 		String json = objectMapper.writeValueAsString(mockSignup);
 		//expect
 		mockMvc.perform(post("/api/auth/signup")
-			.content(json)
-			.contentType(APPLICATION_JSON))
+				.content(json)
+				.contentType(APPLICATION_JSON))
 			.andExpect(status().isCreated())
 			.andDo(print());
 
@@ -123,14 +121,14 @@ class AuthControllerTest {
 
 		EmailPasswordRequest request = EmailPasswordRequest.builder()
 			.email(mockSignup.email())
-			.password(mockSignup.password()+"awalkauh")
+			.password(mockSignup.password() + "awalkauh")
 			.build();
 
 		String json = objectMapper.writeValueAsString(request);
 
 		mockMvc.perform(post("/api/auth/login")
-			.content(json)
-			.contentType(APPLICATION_JSON))
+				.content(json)
+				.contentType(APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
 			.andDo(print());
 
@@ -146,8 +144,8 @@ class AuthControllerTest {
 		System.out.println("accessToken = " + accessToken);
 
 		//expect
-		  mockMvc.perform(get("/logintest")
-				  .header(JWTService.ACCESS_TOKEN_HEADER,JWTService.ACCESS_TOKEN_PREFIX + accessToken).accept(TEXT_PLAIN))
+		mockMvc.perform(get("/logintest")
+				.header(JWTService.ACCESS_TOKEN_HEADER, JWTService.ACCESS_TOKEN_PREFIX + accessToken).accept(TEXT_PLAIN))
 			.andExpect(status().isOk());
 		mockMvc.perform(get("/logintest"))
 			.andExpect(status().isForbidden());
@@ -161,7 +159,7 @@ class AuthControllerTest {
 		Member member = memberRepository.save(mockSignup.toEntity());
 		String refreshToken = jwtService.createRefreshToken(new Userprincipal(member));
 
-		String json = "{\"refreshToken\" : \"" +refreshToken + "\"}";
+		String json = "{\"refreshToken\" : \"" + refreshToken + "\"}";
 
 		mockMvc.perform(post("/api/auth/refresh")
 				.content(json)

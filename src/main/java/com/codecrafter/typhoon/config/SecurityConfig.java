@@ -25,7 +25,7 @@ import com.codecrafter.typhoon.config.filter.JWTAuthFilter;
 import com.codecrafter.typhoon.config.handler.BasicLoginFailHandler;
 import com.codecrafter.typhoon.config.handler.BasicLoginSuccessHandler;
 import com.codecrafter.typhoon.domain.entity.Member;
-import com.codecrafter.typhoon.repository.MemberRepository;
+import com.codecrafter.typhoon.repository.member.MemberRepository;
 import com.codecrafter.typhoon.service.JWTService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
