@@ -3,8 +3,6 @@ package com.codecrafter.typhoon.domain.entity;
 import static lombok.AccessLevel.*;
 
 import org.hibernate.annotations.Comment;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import com.codecrafter.typhoon.domain.enumeration.LoginType;
 
@@ -24,13 +22,13 @@ import lombok.ToString;
 @Getter
 @NoArgsConstructor(access = PROTECTED)
 @ToString //실제론 지울거임
-public class Member {
+public class Member extends BaseEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false,unique = true)
+	@Column(nullable = false, unique = true)
 	@Comment("이메일")
 	private String email;
 
@@ -39,31 +37,27 @@ public class Member {
 	private String password;
 
 	@Enumerated(EnumType.STRING)
-	@Column(nullable = false) @Comment("로그인타입4가지")
+	@Column(nullable = false)
+	@Comment("로그인타입4가지")
 	private LoginType loginType = LoginType.BASIC;
 
-	@Column(nullable = false, unique = true) @Comment("상점명 (젤많이쓸거)")
+	@Column(nullable = false, unique = true)
+	@Comment("상점명 (젤많이쓸거)")
 	private String shopName;
 
-	@Column(nullable = false) @Comment("상점 설명")
+	@Column(nullable = false)
+	@Comment("상점 설명")
 	private String description;
 
 	@Comment("상점 로고")
 	private String logoPath;
 
 	@Column(nullable = false)
+	@Comment("실명")
 	private String realName;
 
 	@Comment("핸드폰번호")
 	private String phone;
-
-	@CreationTimestamp
-	@Comment("생성일자")
-	private String createdAt;
-
-	@UpdateTimestamp
-	@Comment("마지막수정일")
-	private String modifiedAt;
 
 	public void setLoginType(LoginType loginType) {
 		this.loginType = loginType;
@@ -74,12 +68,11 @@ public class Member {
 	}
 
 	@Builder
-	public Member(Long id, String email, String password, LoginType loginType, String shopName, String description,
+	public Member(String email, String password, LoginType loginType, String shopName, String description,
 		String logoPath, String realName, String phone) {
-		this.id = id;
 		this.email = email;
 		this.password = password;
-		this.loginType = loginType;
+		this.loginType = loginType == null ? this.loginType : loginType;
 		this.shopName = shopName;
 		this.description = description;
 		this.logoPath = logoPath;
