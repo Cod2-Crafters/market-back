@@ -14,8 +14,8 @@ import io.swagger.v3.oas.annotations.*;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@RequestMapping("/api/members")
-public class MemberController {
+@RequestMapping("/api/shop")
+public class ShopController {
     MemberRepository memberRepository;
 
     @Operation(summary = "내상점 화면 조회", description = "로그인한 회원의 상점 관리 화면을 조회")

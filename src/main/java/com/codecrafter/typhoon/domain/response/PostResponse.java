@@ -1,4 +1,9 @@
 package com.codecrafter.typhoon.domain.response;
 
-public class PostResponse {
+import com.codecrafter.typhoon.domain.enumeration.PostStatus;
+
+public record PostResponse(Long id, String dltYn, Long price, String mdmeberId, String title, PostStatus postStatus) {
+
 }
+
+

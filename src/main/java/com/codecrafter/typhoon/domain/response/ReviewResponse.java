@@ -1,5 +1,5 @@
 package com.codecrafter.typhoon.domain.response;
 
-public class ReviewResponse {
+public record ReviewResponse () {
 
 }

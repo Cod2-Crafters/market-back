@@ -1,4 +1,4 @@
 package com.codecrafter.typhoon.domain.request;
 
-public class PostRequest {
+public record PostRequest () {
 }
