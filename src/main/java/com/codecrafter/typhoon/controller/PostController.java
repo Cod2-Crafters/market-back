@@ -1,19 +1,23 @@
-package com.codecrafter.typhoon.controller.post;
+package com.codecrafter.typhoon.controller;
 
+import com.codecrafter.typhoon.domain.request.DraftRequest;
 import com.codecrafter.typhoon.domain.request.PostRequest;
+import com.codecrafter.typhoon.domain.response.PostResponse;
+import com.codecrafter.typhoon.repository.post.PostRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/posts")
 public class PostController {
 
+    PostRepository postRepository;
     // 상품 등록 화면 조회
     @GetMapping("/new")
     public ResponseEntity<?> getNewPostScreen() {
-        // 상품 등록 화면 관련 로직
-        // 예: 필요한 정보를 로드하여 클라이언트에 반환
         return ResponseEntity.ok().build();
     }
 
@@ -27,48 +31,50 @@ public class PostController {
     // 상품 수정
     @PutMapping("/{postId}")
     public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
-        // 상품 수정 로직 구현
-        // 예: postService.updatePost(postId, postRequest);
-        return ResponseEntity.ok().body("Post updated successfully");
+        return ResponseEntity.ok().body("updatePost");
     }
 
     // 상품 삭제
     @DeleteMapping("/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable Long postId) {
-        // 상품 삭제 로직 구현
-        // 예: postService.deletePost(postId);
-        return ResponseEntity.ok().body("Post deleted successfully");
+        return ResponseEntity.ok().body("deletePost");
     }
 
     // 임시 저장
     @PostMapping("/draft")
     public ResponseEntity<?> saveDraft(@RequestBody DraftRequest draftRequest) {
-        // 임시 저장 로직 구현
-        // 예: postService.saveDraft(draftRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Draft saved successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("draft");
     }
 
     // 임시 저장불러오기
     @GetMapping("/draft/{draftId}")
     public ResponseEntity<?> getDraft(@PathVariable Long draftId) {
-        // 임시 저장된 내용 불러오기 로직 구현
-        // 예: postService.getDraft(draftId);
-        return ResponseEntity.ok().body("Draft loaded successfully");
+        return ResponseEntity.ok().body("getDraft");
     }
 
     // 상품 목록 조회
     @GetMapping
     public ResponseEntity<List<PostResponse>> getPosts(@RequestParam(required = false) Long categoryId) {
-        // 상품 목록 조회 로직 구현
-        // 예: List<PostResponse> posts = postService.getPosts(categoryId);
-        return ResponseEntity.ok(posts);
+        List postList = null;
+        return ResponseEntity.ok(postList);
     }
 
     // 상품 상세 조회
     @GetMapping("/{postId}")
     public ResponseEntity<PostResponse> getPostDetail(@PathVariable Long postId) {
-        // 상품 상세 조회 로직 구현
-        // 예: PostResponse post = postService.getPostDetail(postId);
-        return ResponseEntity.ok(post);
+        PostResponse postResponse = null;
+        return ResponseEntity.ok(postResponse);
     }
+    // 해시태그 등록
+    @PostMapping("/{postId}/hashtags")
+    public ResponseEntity<?> addHashtags(@PathVariable Long postId, @RequestBody List<String> hashtags) {
+        return ResponseEntity.status(HttpStatus.CREATED).body("addHashtags");
+    }
+
+    // 해시태그 삭제
+    @DeleteMapping("/{postId}/hashtags")
+    public ResponseEntity<?> removeHashtags(@PathVariable Long postId, @RequestBody List<String> hashtags) {
+        return ResponseEntity.ok().body("removeHashtags");
+    }
+
 }

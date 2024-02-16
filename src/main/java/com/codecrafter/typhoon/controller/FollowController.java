@@ -4,33 +4,35 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/follow")
 public class FollowController {
-/*
     // 팔로잉 생성
     @PostMapping("/{memberId}")
-    public ResponseEntity<?> followMember(@PathVariable Long memberId, @AuthenticationPrincipal CustomUserDetails userDetails) {
+    public ResponseEntity<?> followMember(@PathVariable Long memberId) {
         return ResponseEntity.ok().body("followMember");
     }
 
     // 언팔로잉
     @DeleteMapping("/{followId}")
-    public ResponseEntity<?> unfollowMember(@PathVariable Long followId, @AuthenticationPrincipal CustomUserDetails userDetails) {
-        return ResponseEntity.ok().body("Successfully unfollowed");
+    public ResponseEntity<?> unfollowMember(@PathVariable Long followI) {
+        return ResponseEntity.ok().body("unfollowMember");
     }
 
     // 팔로잉 목록 조회
     @GetMapping("/{memberId}/followings")
-    public ResponseEntity<List<FollowDetails>> getFollowings(@PathVariable Long memberId) {
-        return ResponseEntity.ok(followings);
+    public ResponseEntity<List<?>> getFollowings(@PathVariable Long memberId) {
+        List followList = null;
+        return ResponseEntity.ok(followList);
     }
 
     // 팔로워 목록 조회
     @GetMapping("/{memberId}/followers")
-    public ResponseEntity<List<FollowDetails>> getFollowers(@PathVariable Long memberId) {
-        return ResponseEntity.ok(followers);
+    public ResponseEntity<List<?>> getFollowers(@PathVariable Long memberId) {
+        List followList = null;
+        return ResponseEntity.ok(followList);
     }
-*/
 }
 
