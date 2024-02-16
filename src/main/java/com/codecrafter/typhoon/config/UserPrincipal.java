@@ -9,11 +9,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.codecrafter.typhoon.domain.entity.Member;
 
-public class Userprincipal implements UserDetails {
+public class UserPrincipal implements UserDetails {
 
 	private final Member member;
 
-	public Userprincipal(Member member) {
+	public UserPrincipal(Member member) {
 		this.member = member;
 	}
 
@@ -55,4 +55,5 @@ public class Userprincipal implements UserDetails {
 	public boolean isEnabled() {
 		return true;
 	}
+
 }

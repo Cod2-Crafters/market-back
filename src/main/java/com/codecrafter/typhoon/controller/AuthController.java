@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codecrafter.typhoon.config.Userprincipal;
+import com.codecrafter.typhoon.config.UserPrincipal;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.request.SignupRequest;
 import com.codecrafter.typhoon.domain.response.TokenResponse;
@@ -62,7 +62,7 @@ public class AuthController {
 		try {
 			Claims claims = jwtService.getClaims(refreshToken);
 			Member member = authService.findById(Long.parseLong(claims.getSubject()));
-			String accessToken = jwtService.createAccessToken(new Userprincipal(member));
+			String accessToken = jwtService.createAccessToken(new UserPrincipal(member));
 			TokenResponse tokenResponse = TokenResponse.builder().
 				accessToken(accessToken)
 				.build();

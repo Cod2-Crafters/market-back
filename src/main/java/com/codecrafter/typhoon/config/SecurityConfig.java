@@ -96,7 +96,7 @@ public class SecurityConfig {
 			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 				Member member = memberRepository.findByEmail(username)
 					.orElseThrow(() -> new UsernameNotFoundException(username + "으로 가입된 Member가 없음!!!"));
-				return new Userprincipal(member);
+				return new UserPrincipal(member);
 			}
 		};
 	}
