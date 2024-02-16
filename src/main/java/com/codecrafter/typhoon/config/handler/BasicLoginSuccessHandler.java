@@ -7,7 +7,7 @@ import java.io.IOException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
-import com.codecrafter.typhoon.config.Userprincipal;
+import com.codecrafter.typhoon.config.UserPrincipal;
 import com.codecrafter.typhoon.domain.response.TokenResponse;
 import com.codecrafter.typhoon.service.JWTService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,13 +29,13 @@ public class BasicLoginSuccessHandler implements AuthenticationSuccessHandler {
 	@Override
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
 		Authentication authentication) throws IOException, ServletException {
-		Userprincipal userprincipal = (Userprincipal)(authentication.getPrincipal());
-		log.info("인증성공 Userprincipal={}",userprincipal);
+		UserPrincipal userprincipal = (UserPrincipal)(authentication.getPrincipal());
+		log.info("인증성공 UserPrincipal={}", userprincipal);
 
 		String accessToken = jwtService.createAccessToken(userprincipal);
 		String refreshToken = jwtService.createRefreshToken(userprincipal);
 
-		response.addHeader(ACCESS_TOKEN_HEADER,   accessToken);
+		response.addHeader(ACCESS_TOKEN_HEADER, accessToken);
 		response.addHeader(REFRESH_TOKEN_STRING, refreshToken);
 
 		TokenResponse tokenResponse = TokenResponse.builder()
@@ -44,6 +44,6 @@ public class BasicLoginSuccessHandler implements AuthenticationSuccessHandler {
 			.build();
 		System.out.println("tokenResponse = " + tokenResponse);
 
-		objectMapper.writeValue(response.getWriter(),tokenResponse);
+		objectMapper.writeValue(response.getWriter(), tokenResponse);
 	}
 }

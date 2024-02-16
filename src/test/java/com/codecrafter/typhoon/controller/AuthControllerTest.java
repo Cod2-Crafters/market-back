@@ -15,7 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
-import com.codecrafter.typhoon.config.Userprincipal;
+import com.codecrafter.typhoon.config.UserPrincipal;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.request.EmailPasswordRequest;
 import com.codecrafter.typhoon.domain.request.SignupRequest;
@@ -140,7 +140,7 @@ class AuthControllerTest {
 		//given
 		SignupRequest mockSignup = createMockSignup();
 		Member member = memberRepository.save(mockSignup.toEntity());
-		String accessToken = jwtService.createRefreshToken(new Userprincipal(member));
+		String accessToken = jwtService.createRefreshToken(new UserPrincipal(member));
 		System.out.println("accessToken = " + accessToken);
 
 		//expect
@@ -157,7 +157,7 @@ class AuthControllerTest {
 		//given
 		SignupRequest mockSignup = createMockSignup();
 		Member member = memberRepository.save(mockSignup.toEntity());
-		String refreshToken = jwtService.createRefreshToken(new Userprincipal(member));
+		String refreshToken = jwtService.createRefreshToken(new UserPrincipal(member));
 
 		String json = "{\"refreshToken\" : \"" + refreshToken + "\"}";
 

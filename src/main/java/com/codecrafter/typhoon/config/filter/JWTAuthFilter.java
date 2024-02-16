@@ -3,13 +3,12 @@ package com.codecrafter.typhoon.config.filter;
 import static com.codecrafter.typhoon.service.JWTService.*;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.codecrafter.typhoon.config.MockPrincipal;
 import com.codecrafter.typhoon.service.JWTService;
 
 import io.jsonwebtoken.Claims;
@@ -35,13 +34,16 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 			filterChain.doFilter(request, response);
 			return;
 		}
-
 		try {
 			accessToken = accessToken.substring(7);
 			Claims claims = jwtService.getClaims(accessToken);
+			// UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(
+			// 	claims.getSubject(), null, List.of(new SimpleGrantedAuthority("ROLE_USER"))
+			// );
+			Long id = Long.parseLong(claims.getSubject());
+			MockPrincipal mockPrincipalk = new MockPrincipal(id);
 			UsernamePasswordAuthenticationToken authentication = UsernamePasswordAuthenticationToken.authenticated(
-				claims.getSubject(), null, List.of(new SimpleGrantedAuthority("ROLE_USER"))
-			);
+				mockPrincipalk, null, mockPrincipalk.getAuthorities());
 			SecurityContextHolder.getContext().setAuthentication(authentication);
 
 		} catch (Exception e) {
