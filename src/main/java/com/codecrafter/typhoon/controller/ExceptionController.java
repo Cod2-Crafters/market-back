@@ -65,6 +65,6 @@ public class ExceptionController {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> except(Exception e) {
 		return ResponseEntity.status(200).
-			body(e.getClass());
+			body(e.getMessage());
 	}
 }
