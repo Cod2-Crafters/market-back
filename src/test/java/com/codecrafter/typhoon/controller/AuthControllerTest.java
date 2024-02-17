@@ -17,7 +17,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.codecrafter.typhoon.config.UserPrincipal;
 import com.codecrafter.typhoon.domain.entity.Member;
-import com.codecrafter.typhoon.domain.request.EmailPasswordRequest;
+import com.codecrafter.typhoon.domain.request.member.EmailPasswordRequest;
 import com.codecrafter.typhoon.domain.request.SignupRequest;
 import com.codecrafter.typhoon.domain.response.TokenResponse;
 import com.codecrafter.typhoon.repository.member.MemberRepository;

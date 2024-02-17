@@ -8,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.request.SignupRequest;
+import com.codecrafter.typhoon.domain.request.member.UpdateMemberRequest;
+import com.codecrafter.typhoon.domain.response.ShopResponse;
 import com.codecrafter.typhoon.exception.AlreadyExistException;
 import com.codecrafter.typhoon.exception.NoMemberException;
 import com.codecrafter.typhoon.repository.member.MemberRepository;
@@ -60,6 +62,19 @@ public class AuthService {
 	public Member findById(Long id) {
 		return memberRepository.findById(id)
 			.orElseThrow(NoMemberException::new);
+	}
+
+	public ShopResponse getShopInfo(Long memberId) {
+		Member member = memberRepository.findById(memberId)
+			.orElseThrow(() -> new NoMemberException("존재하지 않는 상점"));
+		return new ShopResponse(member);
+	}
+
+	@Transactional(readOnly = true)
+	public void upDateMember(UpdateMemberRequest updateMemberRequest, Member me) {
+		me.updateShopName(updateMemberRequest.getShopName());
+		me.updateDescription(updateMemberRequest.getDescription());
+		me.updatePhone(updateMemberRequest.getPhone());
 	}
 
 }

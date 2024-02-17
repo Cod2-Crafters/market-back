@@ -1,4 +1,4 @@
-package com.codecrafter.typhoon.domain.request;
+package com.codecrafter.typhoon.domain.request.member;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;

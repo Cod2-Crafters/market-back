@@ -4,6 +4,8 @@ import static jakarta.persistence.FetchType.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -35,6 +37,13 @@ public class Follow {
 
 	@CreationTimestamp
 	@Comment("생성일자")
-	private String createdAt;
+	private LocalDateTime createdAt;
+
+	public static Follow newFollow(Member follower, Member following) {
+		Follow follow = new Follow();
+		follow.follower = follower;
+		follow.following = following;
+		return follow;
+	}
 
 }
