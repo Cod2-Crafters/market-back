@@ -3,6 +3,8 @@ package com.codecrafter.typhoon.domain.entity;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
+import java.time.LocalDateTime;
+
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -24,5 +26,5 @@ public class Hashtag {
 
 	@CreationTimestamp
 	@Comment("생성일자")
-	private String createdAt;
+	private LocalDateTime createdAt;
 }

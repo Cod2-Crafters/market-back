@@ -7,13 +7,14 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
 
 @MappedSuperclass
+@Getter
 public class BaseEntity {
 	@CreationTimestamp
 	@Comment("생성일자")
 	private LocalDateTime createdAt;
-
 
 	@UpdateTimestamp
 	@Comment("마지막수정일")

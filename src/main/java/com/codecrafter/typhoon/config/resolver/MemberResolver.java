@@ -23,7 +23,8 @@ public class MemberResolver implements HandlerMethodArgumentResolver {
 
 	@Override
 	public boolean supportsParameter(MethodParameter parameter) {
-		return parameter.getParameterType().equals(Member.class);
+		return parameter.getParameterAnnotation(CurrentMember.class) != null &&
+			parameter.getParameterType().equals(Member.class);
 	}
 
 	@Override
