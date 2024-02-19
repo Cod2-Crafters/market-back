@@ -1,13 +1,9 @@
 server:
-  port: 8001
+  port: 8080
 
 
 
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
   datasource:
     url: jdbc:h2:mem:mylog
     username: sa
@@ -30,8 +26,10 @@ spring:
 
 #
 logging:
+  config: classpath:tmp/logback-spring.xml
   level:
-    root: info
+    root: warn
+    com.codecrafter.typhoon.config.filter.RequestLoggingFilter: Info
 
 
 

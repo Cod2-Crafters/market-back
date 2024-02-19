@@ -10,10 +10,10 @@ import java.util.List;
  */
 public record FollowingResponse(
 	Long followerId,
-	List<SimpleMemberResponse> followingList
+	List<followMemberResponse> followingList
 
 ) {
-	public FollowingResponse(Long followerId, List<SimpleMemberResponse> followingList) {
+	public FollowingResponse(Long followerId, List<followMemberResponse> followingList) {
 		this.followerId = followerId;
 		this.followingList = followingList;
 	}
