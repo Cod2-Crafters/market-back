@@ -1,5 +1,10 @@
 package com.codecrafter.typhoon.controller.member;
 
+import java.util.List;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codecrafter.typhoon.domain.request.MemberRequest;
 import com.codecrafter.typhoon.domain.response.ShopResponse;
+import com.codecrafter.typhoon.domain.response.member.SimpleShopResponse;
 import com.codecrafter.typhoon.service.AuthService;
+import com.codecrafter.typhoon.service.MemberService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,6 +32,15 @@ import lombok.extern.slf4j.Slf4j;
 public class ShopController {
 
 	private final AuthService authService;
+
+	private final MemberService memberService;
+
+	@GetMapping("/list")
+	public ResponseEntity<?> getShopList(
+		@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+		List<SimpleShopResponse> shopList = memberService.getShopList(pageable);
+		return ResponseEntity.ok().body(shopList);
+	}
 
 	@GetMapping("/{memberId}")
 	public ResponseEntity<ShopResponse> getShopInfo(@PathVariable Long memberId) {

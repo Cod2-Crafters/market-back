@@ -11,7 +11,7 @@ import com.codecrafter.typhoon.domain.entity.Follow;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.response.follow.FollowerResponse;
 import com.codecrafter.typhoon.domain.response.follow.FollowingResponse;
-import com.codecrafter.typhoon.domain.response.follow.SimpleMemberResponse;
+import com.codecrafter.typhoon.domain.response.follow.followMemberResponse;
 import com.codecrafter.typhoon.exception.AlreadyExistException;
 import com.codecrafter.typhoon.exception.NoMemberException;
 import com.codecrafter.typhoon.repository.FollowRepository;
@@ -50,8 +50,8 @@ public class FollowService {
 	public FollowingResponse getFollowings(Long followerId) {
 		List<Follow> follows = followRepository.findByFollowerId(followerId);
 
-		List<SimpleMemberResponse> followings = follows.stream()
-			.map(follow -> new SimpleMemberResponse(follow.getFollowing(), follow.getCreatedAt()))
+		List<followMemberResponse> followings = follows.stream()
+			.map(follow -> new followMemberResponse(follow.getFollowing(), follow.getCreatedAt()))
 			.toList();
 
 		return new FollowingResponse(followerId, followings);
@@ -60,8 +60,8 @@ public class FollowService {
 	public FollowerResponse getFollowers(Long followingId) {
 		List<Follow> follows = followRepository.findByFollowingId(followingId);
 
-		List<SimpleMemberResponse> followings = follows.stream()
-			.map(follow -> new SimpleMemberResponse(follow.getFollower(), follow.getCreatedAt()))
+		List<followMemberResponse> followings = follows.stream()
+			.map(follow -> new followMemberResponse(follow.getFollower(), follow.getCreatedAt()))
 			.toList();
 
 		return new FollowerResponse(followingId, followings);

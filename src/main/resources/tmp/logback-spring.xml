@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <springProfile name="dev">
+        <!-- DEV 프로파일 활성화 시 적용될 설정들 -->
+
+        <property name="LOGS" value="${user.home}/log"/>
+
+        <appender name="FILE-INFO" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <encoder>
+                <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{35} - %msg%n</pattern>
+            </encoder>
+
+            <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+                <!-- 날짜별로 로그 디렉토리 생성 -->
+                <fileNamePattern>${LOGS}/%d{yyyy-MM-dd}/info.log</fileNamePattern>
+            </rollingPolicy>
+        </appender>
+
+
+        <root level="warn">
+            <appender-ref ref="FILE-INFO"/>
+        </root>
+    </springProfile>
+</configuration>
