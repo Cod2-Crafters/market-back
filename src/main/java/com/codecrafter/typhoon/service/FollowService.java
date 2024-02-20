@@ -32,17 +32,17 @@ public class FollowService {
 	public void followMember(Long followerId, Member me) {
 		Member following = memberRepository.findById(followerId)
 			.orElseThrow(NoMemberException::new);
-		if (followRepository.existsByFollowerAndFollowing(me, following)) {
+		if (followRepository.existsByFollowerAndFollowing(following, me)) {
 			throw new AlreadyExistException("이미 팔로우하고 있음!!");
 		}
-		Follow follow = newFollow(me, following);
+		Follow follow = newFollow(following, me);
 		followRepository.save(follow);
 	}
 
 	@Transactional(readOnly = false)
-	public void unFollowMember(Long followingId, Member me) {
+	public void unFollowMember(Long followerId, Member me) {
 
-		Follow follow = followRepository.findByFollowerIdAndFollowingId(me.getId(), followingId)
+		Follow follow = followRepository.findByFollowerIdAndFollowingId(followerId, me.getId())
 			.orElseThrow(() -> new NoMemberException("팔로잉하고있지 앟음!!"));
 		followRepository.delete(follow);
 	}
