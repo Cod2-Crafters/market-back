@@ -52,27 +52,11 @@ public class Post extends BaseEntity {
 
 	private boolean isDeleted;
 
-	/**
-	 * Post에 포함되어있는 댓글들
-	 */
-	@OneToMany(mappedBy = "post")
-	private List<com.codecrafter.typhoon.domain.entity.Comment> comments = new ArrayList<>();
-
 	@OneToMany(mappedBy = "post", cascade = ALL)
 	private List<PostHashtag> hashTagList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "post", cascade = ALL)
 	private List<PostImage> postImageList = new ArrayList<>();
-
-	/**
-	 * Post에서 Comments를 추가하기 위한 양방향 메서드
-	 *
-	 * @param comment 추가할코멘트
-	 */
-	public void addComment(com.codecrafter.typhoon.domain.entity.Comment comment) {
-		comments.add(comment);
-		comment.setPost(this);
-	}
 
 	public void addHashtag(Hashtag hashtag) {
 		//TODO

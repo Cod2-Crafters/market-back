@@ -23,16 +23,21 @@ spring:
         format_sql: true
         show_sql: true
     defer-datasource-initialization: true
-
   sql:
     init:
       mode: always
+file:
+  base:
+    dir: ${user.home}/fileStore/
+
 
 #
 logging:
   level:
     org:
       hibernate.sql: debug
+
+
 
 
 
