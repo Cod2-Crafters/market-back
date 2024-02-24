@@ -6,15 +6,18 @@ import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
 
 import com.codecrafter.typhoon.domain.enumeration.PostStatus;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -28,7 +31,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@SQLDelete(sql = "update POST set is_deleted = false where id=?")
+@JsonIgnoreProperties(value = "post")
+@SQLDelete(sql = "update POST set is_deleted = true where id=?")
 public class Post extends BaseEntity {
 	@Id
 	@GeneratedValue(strategy = IDENTITY)
@@ -46,23 +50,38 @@ public class Post extends BaseEntity {
 	@Comment("내용")
 	private String content;
 
-	@Enumerated
+	@Enumerated(value = EnumType.STRING)
 	@Comment("판매상태")
 	private PostStatus status = PostStatus.ON_SALE;
 
 	private boolean isDeleted;
 
 	@OneToMany(mappedBy = "post", cascade = ALL)
-	private List<PostHashtag> hashTagList = new ArrayList<>();
+	private List<PostHashtag> postHashtagList = new ArrayList<>();
 
 	@OneToMany(mappedBy = "post", cascade = ALL)
 	private List<PostImage> postImageList = new ArrayList<>();
 
-	public void addHashtag(Hashtag hashtag) {
-		//TODO
+	public void addPostHashtag(Hashtag hashtag) {
+		PostHashtag postHashtag = new PostHashtag(this, hashtag);
+		this.postHashtagList.add(postHashtag);
+		hashtag.addPostHashtag(postHashtag);
 	}
 
+	/**
+	 * varargs
+	 */
 	public void addImages(PostImage... postImages) {
+		for (PostImage postImage : postImages) {
+			this.postImageList.add(postImage);
+			postImage.setPost(this);
+		}
+	}
+
+	/**
+	 * Collection
+	 */
+	public void addImages(Collection<? extends PostImage> postImages) {
 		for (PostImage postImage : postImages) {
 			this.postImageList.add(postImage);
 			postImage.setPost(this);
@@ -74,6 +93,14 @@ public class Post extends BaseEntity {
 		this.member = member;
 		this.title = title;
 		this.content = content;
+	}
+
+	public String getThumbnailPath() {
+		return this.postImageList
+			.stream().filter(PostImage::isThumbnail)
+			.map(PostImage::getImagePath)
+			.findFirst()
+			.orElse("이미지가 없어 ㅠㅠㅠㅠ");
 	}
 }
 

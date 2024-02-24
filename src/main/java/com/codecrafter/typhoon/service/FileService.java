@@ -1,4 +1,4 @@
-package com.codecrafter.typhoon.repository;
+package com.codecrafter.typhoon.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,7 +31,7 @@ public class FileService {
 	private URI createFileAccessUri(String storeFileName) {
 		URI uri = ServletUriComponentsBuilder
 			.fromCurrentContextPath()
-			.path("/api/file/")
+			.path("/api/file/static/")
 			.path(storeFileName)
 			.build()
 			.toUri();

@@ -25,7 +25,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
 
     runtimeOnly 'com.h2database:h2' //테스트용 h2
     runtimeOnly 'com.mysql:mysql-connector-j' //실제 db
@@ -51,7 +55,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    implementation('com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0') // 쿼리 로그 남기기
+//    implementation('com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0') // 쿼리 로그 남기기
 
 
 }

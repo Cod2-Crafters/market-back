@@ -1,87 +1,63 @@
 package com.codecrafter.typhoon.controller;
 
+import static org.springframework.data.domain.Sort.Direction.*;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.*;
+
+import java.net.URI;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codecrafter.typhoon.repository.FileService;
+import com.codecrafter.typhoon.config.resolver.CurrentMember;
+import com.codecrafter.typhoon.domain.entity.Member;
+import com.codecrafter.typhoon.domain.request.PostCreateRequest;
+import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
+import com.codecrafter.typhoon.domain.response.post.SimplePostResponse;
+import com.codecrafter.typhoon.service.FileService;
 import com.codecrafter.typhoon.service.PostService;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
-@RequestMapping("/api/posts")
+@RequestMapping("/api/post")
+@Slf4j
+@RequiredArgsConstructor
 public class PostController {
 
-	PostService postService;
+	private final PostService postService;
 
-	FileService fileService;
+	private final FileService fileService;
 
-	/**
-	 * 이미지 한장씩 업로드 (MultipartFile)
-	 *
-	 * @param file
-	 * @return
-	 * @throws Exception
-	 */
-	// @PostMapping("/upload-image")
-	// public ResponseEntity<String> saveFile(@RequestParam MultipartFile file) throws Exception {
-	// 	String storeFileName = fileService.storeFile(file);
-	// 	return null;
-	// }
+	@GetMapping("/{postId}")
+	public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable Long postId) {
+		PostDetailResponse postDetail = postService.getPostDetail(postId);
+		return ResponseEntity.ok().body(postDetail);
+	}
 
-	// 상품 등록
-	// @PostMapping
-	// public ResponseEntity<?> createPost(@RequestBody PostRequest postRequest) {
-	//     return ResponseEntity.status(HttpStatus.CREATED)
-	//                          .body("createPost");
-	// }
+	@GetMapping("/list")
+	public ResponseEntity<?> getPostList(@PageableDefault(size = 10, sort = "id", direction = DESC) Pageable pageable) {
+		Slice<SimplePostResponse> postList = postService.getPostList(pageable);
+		return ResponseEntity.ok().body(postList);
+	}
 
-	// 상품 수정
-	// @PutMapping("/{postId}")
-	// public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostRequest postRequest) {
-	// 	return ResponseEntity.ok().body("updatePost");
-	// }
-
-	// 상품 삭제
-	// @DeleteMapping("/{postId}")
-	// public ResponseEntity<?> deletePost(@PathVariable Long postId) {
-	// 	return ResponseEntity.ok().body("deletePost");
-	// }
-	//
-	// // 임시 저장
-	// @PostMapping("/draft")
-	// public ResponseEntity<?> saveDraft(@RequestBody DraftRequest draftRequest) {
-	// 	return ResponseEntity.status(HttpStatus.CREATED).body("draft");
-	// }
-	//
-	// // 임시 저장불러오기
-	// @GetMapping("/draft/{draftId}")
-	// public ResponseEntity<?> getDraft(@PathVariable Long draftId) {
-	// 	return ResponseEntity.ok().body("getDraft");
-	// }
-	//
-	// // 상품 목록 조회
-	// @GetMapping
-	// public ResponseEntity<List<PostResponse>> getPosts(@RequestParam(required = false) Long categoryId) {
-	// 	List postList = null;
-	// 	return ResponseEntity.ok(postList);
-	// }
-	//
-	// // 상품 상세 조회
-	// @GetMapping("/{postId}")
-	// public ResponseEntity<PostResponse> getPostDetail(@PathVariable Long postId) {
-	// 	PostResponse postResponse = null;
-	// 	return ResponseEntity.ok(postResponse);
-	// }
-	//
-	// // 해시태그 등록
-	// @PostMapping("/{postId}/hashtags")
-	// public ResponseEntity<?> addHashtags(@PathVariable Long postId, @RequestBody List<String> hashtags) {
-	// 	return ResponseEntity.status(HttpStatus.CREATED).body("addHashtags");
-	// }
-	//
-	// // 해시태그 삭제
-	// @DeleteMapping("/{postId}/hashtags")
-	// public ResponseEntity<?> removeHashtags(@PathVariable Long postId, @RequestBody List<String> hashtags) {
-	// 	return ResponseEntity.ok().body("removeHashtags");
-	// }
+	//상품등록ㅋ
+	@PostMapping("/")
+	public ResponseEntity<URI> createPost(@RequestBody PostCreateRequest postCreateRequest, @CurrentMember Member me) {
+		Long postId = postService.createPost(postCreateRequest, me);
+		URI uri = fromCurrentRequest()
+			.path("/{id}")
+			.buildAndExpand(postId)
+			.toUri();
+		return ResponseEntity.created(uri).body(uri);
+	}
 
 }

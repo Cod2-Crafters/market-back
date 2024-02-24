@@ -36,9 +36,8 @@ public class Bookmark {
 	private LocalDateTime createdAt;
 
 	public Bookmark(Member member, Post post) {
-		Bookmark bookmark = new Bookmark();
-		bookmark.member = member;
-		bookmark.post = post;
+		this.member = member;
+		this.post = post;
 	}
 
 }

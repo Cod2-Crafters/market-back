@@ -6,7 +6,7 @@ package com.codecrafter.typhoon.exception;
 public class NoPostException extends BaseException {
 
 	private static final int STATUS = 404;
-	private static final String DEFAULT_MSG = "NO Post Exists !!!!!!!";
+	private static final String DEFAULT_MSG = "NO SimplePostResponse Exists !!!!!!!";
 
 	public NoPostException() {
 		super(DEFAULT_MSG, STATUS);
