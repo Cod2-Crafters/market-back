@@ -17,12 +17,10 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@ToString //실제론 지울거임
 @Hidden
 public class Member extends BaseEntity {
 

@@ -19,7 +19,7 @@ import com.codecrafter.typhoon.repository.post.PostRepository;
 import jakarta.persistence.EntityManager;
 
 @SpringBootTest
-class PostTest {
+class SimplePostResponseTest {
 
 	@Autowired
 	private EntityManager em;

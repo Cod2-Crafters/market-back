@@ -22,8 +22,8 @@ public class JWTService {
 
 	public final SecretKey KEY = Keys.hmacShaKeyFor(
 		Decoders.BASE64.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-	private static final long ACCESS_TOKEN_EXPIRATION_TIME = 12 * 60 * 60 * 1000; //테스트용
-	private static final long REFRESH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 1000; //1일
+	private static final long ACCESS_TOKEN_EXPIRATION_TIME = 12 * 60 * 60 * 20000; //테스트용
+	private static final long REFRESH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 10000; //1일
 
 	public static final String ACCESS_TOKEN_STRING = "accessToken";
 	public static final String ACCESS_TOKEN_PREFIX = "Bearer ";
