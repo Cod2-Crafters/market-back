@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.codecrafter.typhoon.domain.entity.Category;
 import com.codecrafter.typhoon.domain.entity.Hashtag;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.entity.Post;
@@ -15,6 +16,7 @@ import com.codecrafter.typhoon.domain.request.PostCreateRequest;
 import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
 import com.codecrafter.typhoon.domain.response.post.SimplePostResponse;
 import com.codecrafter.typhoon.exception.NoPostException;
+import com.codecrafter.typhoon.repository.category.CategoryRepository;
 import com.codecrafter.typhoon.repository.hashtag.HashtagRepository;
 import com.codecrafter.typhoon.repository.post.PostRepository;
 
@@ -31,6 +33,8 @@ public class PostService {
 
 	private final HashtagRepository hashtagRepository;
 
+	private final CategoryRepository categoryRepository;
+
 	/**
 	 * 포스트 생성 로직
 	 *
@@ -45,6 +49,10 @@ public class PostService {
 			.title(postCreateRequest.title())
 			.content(postCreateRequest.content())
 			.build();
+
+		Category category = categoryRepository.findById(postCreateRequest.categoryId())
+			.orElseGet(() -> new Category(0L, "기타"));
+		post.setCategory(category);
 
 		List<PostImage> list = postCreateRequest.postImageRequestList().stream()
 			.map(PostCreateRequest.ImageRequest::toEntity)

@@ -42,6 +42,10 @@ public class Post extends BaseEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "category_id")
+	private Category category;
+
 	@Column(nullable = false)
 	@Comment("제목")
 	private String title;
@@ -61,6 +65,11 @@ public class Post extends BaseEntity {
 
 	@OneToMany(mappedBy = "post", cascade = ALL)
 	private List<PostImage> postImageList = new ArrayList<>();
+
+	public void setCategory(Category category) {
+		this.category = category;
+		category.getPostList().add(this);
+	}
 
 	public void addPostHashtag(Hashtag hashtag) {
 		PostHashtag postHashtag = new PostHashtag(this, hashtag);
