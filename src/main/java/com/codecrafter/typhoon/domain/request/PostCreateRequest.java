@@ -17,7 +17,7 @@ import jakarta.validation.constraints.Size;
  */
 public record PostCreateRequest(
 
-	long categoryId,
+	Long categoryId,
 
 	@NotBlank(message = "제목은 필수") @Size(max = 50, message = "최대50자") String title,
 	@NotBlank(message = "컨텐츠는 필수") String content,

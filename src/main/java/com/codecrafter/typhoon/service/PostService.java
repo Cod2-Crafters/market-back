@@ -49,10 +49,11 @@ public class PostService {
 			.title(postCreateRequest.title())
 			.content(postCreateRequest.content())
 			.build();
-
-		Category category = categoryRepository.findById(postCreateRequest.categoryId())
-			.orElseGet(() -> new Category(0L, "기타"));
-		post.setCategory(category);
+		if (postCreateRequest.categoryId() != null) {
+			Category category = categoryRepository.findById(postCreateRequest.categoryId())
+				.orElseGet(() -> new Category(0L, "기타"));
+			post.setCategory(category);
+		}
 
 		List<PostImage> list = postCreateRequest.postImageRequestList().stream()
 			.map(PostCreateRequest.ImageRequest::toEntity)

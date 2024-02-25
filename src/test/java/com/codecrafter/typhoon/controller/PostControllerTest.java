@@ -86,6 +86,7 @@ class PostControllerTest {
 			.toList();
 
 		PostCreateRequest postCreateRequest = new PostCreateRequest(
+			0L,
 			"this is title",
 			"this is content",
 			collect,

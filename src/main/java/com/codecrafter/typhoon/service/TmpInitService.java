@@ -8,6 +8,7 @@ import java.util.stream.IntStream;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +29,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
+@Profile("!test")
 public class TmpInitService implements ApplicationRunner {
 	private final MemberRepository memberRepository;
 	private final MemberService memberService;

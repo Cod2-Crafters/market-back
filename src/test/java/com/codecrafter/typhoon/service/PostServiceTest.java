@@ -59,6 +59,7 @@ class PostServiceTest {
 			.toList();
 
 		PostCreateRequest postCreateRequest = new PostCreateRequest(
+			null,
 			"this is title",
 			"this is content",
 			collect,
