@@ -5,6 +5,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 
 import java.net.URI;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.web.PageableDefault;
@@ -37,19 +38,43 @@ public class PostController {
 
 	private final FileService fileService;
 
+
+	@Operation(summary = "상품 상세조회",
+			description = "★단건 상품정보 상세조회</br>"
+						+ "PostId = 숫자</br>"
+						+ "{host}/api/post/1")
 	@GetMapping("/{postId}")
 	public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable Long postId) {
 		PostDetailResponse postDetail = postService.getPostDetail(postId);
 		return ResponseEntity.ok().body(postDetail);
 	}
 
+	@Operation(summary = "상품 목록조회(페이징)",
+			description = "★상품 전체 목록조회</br>"
+						+ "page = 숫자 / size = 숫자 / sort = 정렬할 필드명(id, craterAt, ...)</br>"
+						+ "{host}/api/post/list?page=1")
 	@GetMapping("/list")
 	public ResponseEntity<?> getPostList(@PageableDefault(size = 10, sort = "id", direction = DESC) Pageable pageable) {
 		Slice<SimplePostResponse> postList = postService.getPostList(pageable);
 		return ResponseEntity.ok().body(postList);
 	}
 
-	//상품등록ㅋ
+	@Operation(summary = "상품 등록",
+			description = "★상품 신규 등록</br>"
+						+ "title=문자 / content = 문자 / imagetPath = 문자 / isThumbnail = 썸네일여부(논리) / hashTagList = 문자배열</br>"
+						+ "{</br>"
+						+ "  \"title\": \"금장코트\",</br>"
+						+ "  \"content\": \"단종된 코트 급처로 팝니다\",</br>"
+						+ "  \"postImageRequestList\": [</br>"
+						+ "    {</br>"
+						+ "      \"imagePath\": \"\",</br>"
+						+ "      \"isThumbnail\": true</br>"
+						+ "    }</br>"
+						+ "  ],</br>"
+						+ "  \"hashTagList\": [</br>"
+						+ "    \"롱코트\", \"공유\", \"단종제품\"</br>"
+						+ "  ]</br>"
+						+ "}")
 	@PostMapping("/")
 	public ResponseEntity<URI> createPost(@RequestBody PostCreateRequest postCreateRequest, @CurrentMember Member me) {
 		Long postId = postService.createPost(postCreateRequest, me);
@@ -60,4 +85,5 @@ public class PostController {
 		return ResponseEntity.created(uri).body(uri);
 	}
 
+	// 상품수정
 }
