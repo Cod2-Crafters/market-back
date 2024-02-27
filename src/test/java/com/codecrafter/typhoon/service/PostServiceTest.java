@@ -63,7 +63,8 @@ class PostServiceTest {
 			"this is title",
 			"this is content",
 			collect,
-			List.of("abc", "efg", "hij", "wer")
+			List.of("abc", "efg", "hij", "wer"),
+			111
 		);
 		return postCreateRequest;
 	}

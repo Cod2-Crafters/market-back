@@ -40,6 +40,11 @@ public class TmpInitService implements ApplicationRunner {
 	private final List<Long> CATEGORIES = Arrays.asList(11L, 12L, 13L, 21L, 22L, 23L, 31L, 32L, 33L, 41L, 42L, 43L);
 	private final Random random = new Random();
 
+	private final Integer getRandomInt() {
+		int i = random.nextInt(Integer.MAX_VALUE);
+		return i > 0 ? i : -i;
+	}
+
 	private PostCreateRequest createPostRequest(int num) {
 		int idx = random.nextInt(CATEGORIES.size());
 		Long categoryId = CATEGORIES.get(idx);
@@ -50,8 +55,10 @@ public class TmpInitService implements ApplicationRunner {
 		String title = "this is title " + num;
 		String content = "this is content " + num;
 		List<String> tags = List.of("해시", "태그", "리스트", "반복" + num); // Add dynamic tag based on num
+		PostCreateRequest postCreateRequest = new PostCreateRequest(categoryId, title, content, images, tags,
+			getRandomInt());
 
-		return new PostCreateRequest(categoryId, title, content, images, tags);
+		return new PostCreateRequest(categoryId, title, content, images, tags, getRandomInt());
 	}
 
 	@Transactional

@@ -48,6 +48,7 @@ public class PostService {
 			.member(me)
 			.title(postCreateRequest.title())
 			.content(postCreateRequest.content())
+			.price(postCreateRequest.price())
 			.build();
 		if (postCreateRequest.categoryId() != null) {
 			Category category = categoryRepository.findById(postCreateRequest.categoryId())

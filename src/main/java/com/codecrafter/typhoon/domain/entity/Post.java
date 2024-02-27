@@ -58,6 +58,9 @@ public class Post extends BaseEntity {
 	@Comment("판매상태")
 	private PostStatus status = PostStatus.ON_SALE;
 
+	@Comment("가격")
+	private Integer price;
+
 	private boolean isDeleted;
 
 	@OneToMany(mappedBy = "post", cascade = ALL)
@@ -98,10 +101,11 @@ public class Post extends BaseEntity {
 	}
 
 	@Builder
-	public Post(Member member, String title, String content) {
+	public Post(Member member, String title, String content, Integer price) {
 		this.member = member;
 		this.title = title;
 		this.content = content;
+		this.price = price;
 	}
 
 	public String getThumbnailPath() {
