@@ -11,6 +11,8 @@ public record SimplePostResponse(
 	Long id,
 	SimpleMemberResponse simpleMemberResponse,
 	String title,
+
+	Integer price,
 	String content,
 	PostStatus postStatus,
 	boolean isDeleted,
@@ -24,6 +26,7 @@ public record SimplePostResponse(
 			post.getId(),
 			new SimpleMemberResponse(post.getMember()),
 			post.getTitle(),
+			post.getPrice(),
 			post.getContent(),
 			post.getStatus(),
 			post.isDeleted(),

@@ -86,10 +86,12 @@ class PostControllerTest {
 			.toList();
 
 		PostCreateRequest postCreateRequest = new PostCreateRequest(
+			0L,
 			"this is title",
 			"this is content",
 			collect,
-			List.of("abc", "efg", "hij", "wer")
+			List.of("abc", "efg", "hij", "wer"),
+			111
 		);
 		return postCreateRequest;
 	}

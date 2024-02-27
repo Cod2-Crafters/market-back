@@ -42,6 +42,10 @@ public class Post extends BaseEntity {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
+	@ManyToOne(fetch = LAZY)
+	@JoinColumn(name = "category_id")
+	private Category category;
+
 	@Column(nullable = false)
 	@Comment("제목")
 	private String title;
@@ -54,6 +58,9 @@ public class Post extends BaseEntity {
 	@Comment("판매상태")
 	private PostStatus status = PostStatus.ON_SALE;
 
+	@Comment("가격")
+	private Integer price;
+
 	private boolean isDeleted;
 
 	@OneToMany(mappedBy = "post", cascade = ALL)
@@ -61,6 +68,11 @@ public class Post extends BaseEntity {
 
 	@OneToMany(mappedBy = "post", cascade = ALL)
 	private List<PostImage> postImageList = new ArrayList<>();
+
+	public void setCategory(Category category) {
+		this.category = category;
+		category.getPostList().add(this);
+	}
 
 	public void addPostHashtag(Hashtag hashtag) {
 		PostHashtag postHashtag = new PostHashtag(this, hashtag);
@@ -89,10 +101,11 @@ public class Post extends BaseEntity {
 	}
 
 	@Builder
-	public Post(Member member, String title, String content) {
+	public Post(Member member, String title, String content, Integer price) {
 		this.member = member;
 		this.title = title;
 		this.content = content;
+		this.price = price;
 	}
 
 	public String getThumbnailPath() {

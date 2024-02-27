@@ -64,7 +64,8 @@ public class ExceptionController {
 	 */
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> except(Exception e) {
+		log.error("Error", e);
 		return ResponseEntity.status(400).
-			body(e.getStackTrace());
+			body(e);
 	}
 }
