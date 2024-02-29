@@ -8,7 +8,7 @@ public enum LoginType {
 
 	private String type;
 
-	public String getType(){
+	public String getType() {
 		return type;
 	}
 

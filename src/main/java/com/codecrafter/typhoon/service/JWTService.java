@@ -6,7 +6,7 @@ import javax.crypto.SecretKey;
 
 import org.springframework.stereotype.Service;
 
-import com.codecrafter.typhoon.config.Userprincipal;
+import com.codecrafter.typhoon.config.UserPrincipal;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -22,8 +22,8 @@ public class JWTService {
 
 	public final SecretKey KEY = Keys.hmacShaKeyFor(
 		Decoders.BASE64.decode("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"));
-	private static final long ACCESS_TOKEN_EXPIRATION_TIME = 30 * 60 * 1000; //30분
-	private static final long REFRESH_TOKEN_EXPIRATION_TIME = 24 * 60 * 1000; //1일
+	private static final long ACCESS_TOKEN_EXPIRATION_TIME = 12 * 60 * 60 * 20000; //테스트용
+	private static final long REFRESH_TOKEN_EXPIRATION_TIME = 24 * 60 * 60 * 10000; //1일
 
 	public static final String ACCESS_TOKEN_STRING = "accessToken";
 	public static final String ACCESS_TOKEN_PREFIX = "Bearer ";
@@ -31,11 +31,7 @@ public class JWTService {
 
 	public static final String REFRESH_TOKEN_STRING = "refreshToken";
 
-
-
-	public String createAccessToken(Userprincipal userprincipal) {
-
-
+	public String createAccessToken(UserPrincipal userprincipal) {
 
 		String accessToken = Jwts.builder()
 			.subject(String.valueOf(userprincipal.getId()))
@@ -47,7 +43,7 @@ public class JWTService {
 		return accessToken;
 	}
 
-	public String createRefreshToken(Userprincipal userprincipal) {
+	public String createRefreshToken(UserPrincipal userprincipal) {
 		String refreshToken = Jwts.builder()
 			.subject(String.valueOf(userprincipal.getId()))
 			.claim("email", userprincipal.getUsername())
@@ -58,13 +54,9 @@ public class JWTService {
 		return refreshToken;
 	}
 
-
-	public Claims getClaims(String token){
+	public Claims getClaims(String token) {
 		Claims claims = Jwts.parser().verifyWith(KEY).build().parseSignedClaims(token).getPayload();
 		return claims;
 	}
-
-
-
 
 }

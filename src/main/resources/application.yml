@@ -4,6 +4,8 @@ server:
 
 
 spring:
+  #  jackson:
+  #    default-property-inclusion: non_null
   h2:
     console:
       enabled: true
@@ -22,17 +24,26 @@ spring:
       hibernate:
         format_sql: true
         show_sql: true
+        default_batch_fetch_size: 50
+
     defer-datasource-initialization: true
+    open-in-view: false
 
   sql:
     init:
       mode: always
+file:
+  base:
+    dir: ${user.home}/fileStore/
+
 
 #
 logging:
   level:
     org:
       hibernate.sql: debug
+
+
 
 
 

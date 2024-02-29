@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: test
+  sql:
+    init:
+      mode: never
+
+
+file:
+  base:
+    dir: ${user.home}/fileStore/

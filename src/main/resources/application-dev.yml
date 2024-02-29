@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:mylog
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: com.codecrafter.typhoon.config.CustomUpperCaseSnakeCasePhysicalNamingStrategy
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+
+#
+logging:
+  config: classpath:tmp/logback-spring.xml
+  level:
+    root: warn
+    com.codecrafter.typhoon.config.filter.RequestLoggingFilter: Info
+
+
+
+

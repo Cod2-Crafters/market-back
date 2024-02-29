@@ -6,6 +6,7 @@ import org.hibernate.annotations.Comment;
 
 import com.codecrafter.typhoon.domain.enumeration.LoginType;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -16,12 +17,11 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@ToString //실제론 지울거임
+@Hidden
 public class Member extends BaseEntity {
 
 	@Id
@@ -80,4 +80,23 @@ public class Member extends BaseEntity {
 		this.phone = phone;
 
 	}
+
+	public void updateShopName(String shopName) {
+		if (shopName != null && shopName.isEmpty()) {
+			this.shopName = shopName;
+		}
+	}
+
+	public void updateDescription(String description) {
+		if (description != null && description.isEmpty()) {
+			this.description = description;
+		}
+	}
+
+	public void updatePhone(String phone) {
+		if (this.phone != null && phone.isEmpty()) {
+			this.phone = phone;
+		}
+	}
+
 }

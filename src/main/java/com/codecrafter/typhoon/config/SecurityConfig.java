@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,9 +20,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 import com.codecrafter.typhoon.config.filter.EmailPasswordAuthFilter;
 import com.codecrafter.typhoon.config.filter.JWTAuthFilter;
+import com.codecrafter.typhoon.config.filter.RequestLoggingFilter;
 import com.codecrafter.typhoon.config.handler.BasicLoginFailHandler;
 import com.codecrafter.typhoon.config.handler.BasicLoginSuccessHandler;
 import com.codecrafter.typhoon.domain.entity.Member;
@@ -33,7 +36,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity(debug = false)
 @Slf4j
 @RequiredArgsConstructor
 @EnableMethodSecurity(prePostEnabled = true)
@@ -47,13 +50,19 @@ public class SecurityConfig {
 
 	@Bean
 	public WebSecurityCustomizer webSecurityCustomizer() {
-		return (web -> web.ignoring().requestMatchers(antMatcher("/h2-console/**")));
+		return (web -> web.ignoring().requestMatchers(
+			antMatcher("/h2-console/**"),
+			antMatcher("/swagger-ui/**"),
+			antMatcher("/v3/api-docs/**"),
+			antMatcher("/swagger-resources/**"),
+			antMatcher("/webjars/**")
+		));
 	}
 
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf(AbstractHttpConfigurer::disable)
-			.cors(AbstractHttpConfigurer::disable)
+			.cors(Customizer.withDefaults())
 			.authorizeHttpRequests(
 				authorizationManagerRequestMatcherRegistry -> authorizationManagerRequestMatcherRegistry
 					.requestMatchers(antMatcher("/logintest")).hasRole("USER")
@@ -61,6 +70,7 @@ public class SecurityConfig {
 			.sessionManagement(httpSecuritySessionManagementConfigurer -> httpSecuritySessionManagementConfigurer
 				.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.formLogin(AbstractHttpConfigurer::disable)
+			.addFilterBefore(new RequestLoggingFilter(), SecurityContextPersistenceFilter.class)
 			.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
 			.addFilterBefore(jwtAuthFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -96,7 +106,7 @@ public class SecurityConfig {
 			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 				Member member = memberRepository.findByEmail(username)
 					.orElseThrow(() -> new UsernameNotFoundException(username + "으로 가입된 Member가 없음!!!"));
-				return new Userprincipal(member);
+				return new UserPrincipal(member);
 			}
 		};
 	}

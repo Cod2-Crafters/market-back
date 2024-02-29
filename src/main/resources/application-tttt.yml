@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+
+
+spring:
+  jackson:
+    default-property-inclusion: non_null
+  datasource:
+    url: jdbc:mysql://localhost:3306/typhoonshop
+    username: root
+    password:
+  jpa:
+    hibernate:
+      naming:
+        physical-strategy: com.codecrafter.typhoon.config.CustomUpperCaseSnakeCasePhysicalNamingStrategy
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+        default_batch_fetch_size: 50
+        dialect: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+    open-in-view: false
+
+  sql:
+    init:
+      mode: always
+file:
+  base:
+    dir: ${user.home}/fileStore/
+
+
+#
+logging:
+  level:
+    org:
+      hibernate.sql: debug
+
+
+
+
+
+

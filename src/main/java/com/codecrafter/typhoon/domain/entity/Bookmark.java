@@ -35,4 +35,9 @@ public class Bookmark {
 	@CreationTimestamp
 	private LocalDateTime createdAt;
 
+	public Bookmark(Member member, Post post) {
+		this.member = member;
+		this.post = post;
+	}
+
 }
