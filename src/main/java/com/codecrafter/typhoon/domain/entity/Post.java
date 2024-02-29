@@ -115,5 +115,34 @@ public class Post extends BaseEntity {
 			.findFirst()
 			.orElse("이미지가 없어 ㅠㅠㅠㅠ");
 	}
+
+	public void updateTitle(String title) {
+		if (title == null || title.isEmpty()) {
+			throw new IllegalArgumentException("TITLE cannot be empty");
+		}
+
+		this.title = title;
+	}
+
+	public void updateContent(String content) {
+		if (content == null || content.isEmpty()) {
+			throw new IllegalArgumentException("content cannot be empty");
+		}
+		this.content = content;
+	}
+
+	public void updateStatus(PostStatus postStatus) {
+		if (postStatus == null) {
+			throw new IllegalArgumentException("postStatus cannot be empty");
+		}
+		this.status = postStatus;
+	}
+
+	public void updatePrice(Integer price) {
+		if (price == null) {
+			throw new IllegalArgumentException("price cannot be empty");
+		}
+		this.price = price;
+	}
 }
 

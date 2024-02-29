@@ -12,10 +12,13 @@ import com.codecrafter.typhoon.domain.entity.Hashtag;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.entity.Post;
 import com.codecrafter.typhoon.domain.entity.PostImage;
-import com.codecrafter.typhoon.domain.request.PostCreateRequest;
+import com.codecrafter.typhoon.domain.request.post.ImageRequest;
+import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
+import com.codecrafter.typhoon.domain.request.post.PostUpdateRequest;
 import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
 import com.codecrafter.typhoon.domain.response.post.SimplePostResponse;
 import com.codecrafter.typhoon.exception.NoPostException;
+import com.codecrafter.typhoon.exception.NotExistException;
 import com.codecrafter.typhoon.repository.category.CategoryRepository;
 import com.codecrafter.typhoon.repository.hashtag.HashtagRepository;
 import com.codecrafter.typhoon.repository.post.PostRepository;
@@ -57,7 +60,7 @@ public class PostService {
 		}
 
 		List<PostImage> list = postCreateRequest.postImageRequestList().stream()
-			.map(PostCreateRequest.ImageRequest::toEntity)
+			.map(ImageRequest::toEntity)
 			.toList();
 		post.addImages(list);
 
@@ -92,5 +95,36 @@ public class PostService {
 		Slice<Post> postSlices = postRepository.findWithMemberBy(pageable);
 		Slice<SimplePostResponse> simplePostResopnseSlice = postSlices.map(SimplePostResponse::new);
 		return simplePostResopnseSlice;
+	}
+
+	/**
+	 * @param postId            계시글번호
+	 * @param postUpdateRequest 업데이트 dto 객체
+	 * @return postID
+	 */
+	public Long updatePost(Long postId, PostUpdateRequest postUpdateRequest) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(NoPostException::new);
+		if (post.isDeleted()) {
+			throw new NotExistException("삭제된 계시물입니다 복구 후 진행 바람");
+		}
+
+		Category category = categoryRepository.findById(postUpdateRequest.CategoryId())
+			.orElseThrow(() -> new NotExistException("존재하지 않는 카테고리입니다"));
+		post.setCategory(category);
+
+		post.updateTitle(postUpdateRequest.title());
+		post.updateContent(postUpdateRequest.content());
+		post.updateStatus(postUpdateRequest.postStatus());
+		post.updatePrice(postUpdateRequest.price());
+		return post.getId();
+	}
+
+	public void deletePost(Long postId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(NoPostException::new);
+
+		postRepository.delete(post);
+
 	}
 }

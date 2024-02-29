@@ -3,7 +3,9 @@ package com.codecrafter.typhoon.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -56,6 +58,12 @@ public class ExceptionController {
 		return ResponseEntity.status(e.getCode()).body(body);
 	}
 
+	@ExceptionHandler(AccessDeniedException.class)
+	public ResponseEntity<?> accessDenied(AccessDeniedException e) {
+		return
+			ResponseEntity.status(403).body(e.getMessage());
+	}
+
 	/**
 	 * 예상치 못한 오류 처리
 	 *
@@ -65,7 +73,7 @@ public class ExceptionController {
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> except(Exception e) {
 		log.error("Error", e);
-		return ResponseEntity.status(400).
+		return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).
 			body(e);
 	}
 }

@@ -14,7 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.entity.Post;
-import com.codecrafter.typhoon.domain.request.PostCreateRequest;
+import com.codecrafter.typhoon.domain.request.post.ImageRequest;
+import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
 import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
 import com.codecrafter.typhoon.repository.hashtag.HashtagRepository;
 import com.codecrafter.typhoon.repository.member.MemberRepository;
@@ -54,8 +55,8 @@ class PostServiceTest {
 	}
 
 	public PostCreateRequest createPostRequest() {
-		List<PostCreateRequest.ImageRequest> collect = IntStream.range(0, 10)
-			.mapToObj(i -> new PostCreateRequest.ImageRequest("/test" + i, i == 0))
+		List<ImageRequest> collect = IntStream.range(0, 10)
+			.mapToObj(i -> new ImageRequest("/test" + i, i == 0))
 			.toList();
 
 		PostCreateRequest postCreateRequest = new PostCreateRequest(
