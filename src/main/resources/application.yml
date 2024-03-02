@@ -1,3 +1,13 @@
+#
+logging:
+  level:
+    org:
+      hibernate.sql: debug
+    root: info
+
+
+
+
 server:
   port: 8080
 
@@ -37,11 +47,6 @@ file:
     dir: ${user.home}/fileStore/
 
 
-#
-logging:
-  level:
-    org:
-      hibernate.sql: debug
 
 
 

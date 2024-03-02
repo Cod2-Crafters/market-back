@@ -34,4 +34,12 @@ public class PostHashtag {
 		this.post = post;
 	}
 
+	@Override
+	public String toString() {
+		return "PostHashtag{" +
+			"id=" + id +
+			", postID=" + post.getId() +
+			", hashtag=" + hashtag +
+			'}';
+	}
 }

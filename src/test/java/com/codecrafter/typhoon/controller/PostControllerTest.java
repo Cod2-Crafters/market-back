@@ -23,6 +23,7 @@ import com.codecrafter.typhoon.config.UserPrincipal;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.request.post.ImageRequest;
 import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
+import com.codecrafter.typhoon.repository.PostImageRepository;
 import com.codecrafter.typhoon.repository.hashtag.HashtagRepository;
 import com.codecrafter.typhoon.repository.member.MemberRepository;
 import com.codecrafter.typhoon.repository.post.PostRepository;
@@ -55,6 +56,9 @@ class PostControllerTest {
 	@Autowired
 	private PostService postService;
 
+	@Autowired
+	private PostImageRepository postImageRepository;
+
 	Member getSavedMember() {
 		Member member = Member.builder()
 			.email("email@email.com")
@@ -74,6 +78,8 @@ class PostControllerTest {
 
 	@AfterEach
 	void clean() {
+
+		postImageRepository.deleteAll();
 		postRepository.deleteAll();
 		postRepository.physicalDeleteForTest();
 		hashtagRepository.deleteAll();

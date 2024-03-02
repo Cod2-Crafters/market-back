@@ -41,4 +41,13 @@ public class Hashtag {
 	public Hashtag(String tagName) {
 		this.tagName = tagName;
 	}
+
+	@Override
+	public String toString() {
+		return "Hashtag{" +
+			"id=" + id +
+			", tagName='" + tagName + '\'' +
+			", createdAt=" + createdAt +
+			'}';
+	}
 }

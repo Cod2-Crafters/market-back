@@ -12,6 +12,7 @@ import com.codecrafter.typhoon.domain.entity.Hashtag;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.entity.Post;
 import com.codecrafter.typhoon.domain.entity.PostImage;
+import com.codecrafter.typhoon.domain.request.HashtagsRequest;
 import com.codecrafter.typhoon.domain.request.post.ImageRequest;
 import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
 import com.codecrafter.typhoon.domain.request.post.PostUpdateRequest;
@@ -123,8 +124,33 @@ public class PostService {
 	public void deletePost(Long postId) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(NoPostException::new);
-
 		postRepository.delete(post);
+	}
 
+	/**
+	 * 해시태그배열
+	 *
+	 * @param postId
+	 * @param hashtagsRequest 해시태그목록 List
+	 */
+	public void addHashtagsToPost(Long postId, HashtagsRequest hashtagsRequest) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(NoPostException::new);
+		hashtagsRequest.hashtagList()
+			.stream()
+			.map(h -> hashtagRepository.findByTagName(h)
+				.orElseGet(() -> hashtagRepository.save(new Hashtag(h)))
+			).forEach(post::addPostHashtag);
+	}
+
+	/**
+	 * @param postId
+	 * @param imageRequest 하나의 Image
+	 */
+	public void addImagesToPost(Long postId, ImageRequest imageRequest) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(NoPostException::new);
+		PostImage postImage = imageRequest.toEntity();
+		post.addImages(postImage);
 	}
 }

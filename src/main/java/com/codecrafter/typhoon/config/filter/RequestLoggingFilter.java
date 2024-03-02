@@ -8,6 +8,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,8 +20,6 @@ public class RequestLoggingFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 		throws IOException, ServletException {
-		log.info(
-			"#####################################\nRequestLoggingFilter\n##############################################");
 		if (request instanceof HttpServletRequest httpServletRequest) {
 			StringBuilder fullUrl = new StringBuilder(httpServletRequest.getRequestURL());
 
@@ -28,10 +27,13 @@ public class RequestLoggingFilter implements Filter {
 				fullUrl.append('?').append(httpServletRequest.getQueryString());
 			}
 			String ipAddress = request.getRemoteAddr();
-			log.info("Request from IP: {} to URL: {}", ipAddress, fullUrl.toString());
+			log.info("\bRequest from IP: {} to URL: {}", ipAddress, fullUrl.toString());
 		}
 
 		chain.doFilter(request, response);
+
+		int status = ((HttpServletResponse)response).getStatus();
+		log.info("STATUS = {}\n", status);
 	}
 
 }

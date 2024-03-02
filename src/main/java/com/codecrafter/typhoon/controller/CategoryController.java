@@ -3,6 +3,7 @@ package com.codecrafter.typhoon.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class CategoryController {
 	// 	return categoryService.getAll();
 	// }
 
-	@RequestMapping("/list")
+	@GetMapping("/list")
 	public ResponseEntity<List<CategoryCountResponse>> getAllWithCount() {
 		List<CategoryCountResponse> allWithPostCount = categoryService.getAllWithPostCount();
 		return ResponseEntity.ok().body(allWithPostCount);

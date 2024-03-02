@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.codecrafter.typhoon.aop.CheckOwner;
 import com.codecrafter.typhoon.config.resolver.CurrentMember;
 import com.codecrafter.typhoon.domain.entity.Member;
+import com.codecrafter.typhoon.domain.request.HashtagsRequest;
+import com.codecrafter.typhoon.domain.request.post.ImageRequest;
 import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
 import com.codecrafter.typhoon.domain.request.post.PostUpdateRequest;
 import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
@@ -92,6 +94,21 @@ public class PostController {
 	public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest postUpdateRequest) {
 		Long id = postService.updatePost(postId, postUpdateRequest);
 		return ResponseEntity.ok().build();
+	}
+
+	@CheckOwner
+	@PostMapping("/{postId}/hashtags")
+	public ResponseEntity<?> addHashtag(@PathVariable Long postId, @RequestBody HashtagsRequest hashtagsRequest) {
+		postService.addHashtagsToPost(postId, hashtagsRequest);
+
+		return ResponseEntity.ok().body("add hashtags success");
+	}
+
+	@CheckOwner
+	@PostMapping("/{postId}/images")
+	public ResponseEntity<?> addImage(@PathVariable Long postId, @RequestBody ImageRequest imageRequest) {
+		postService.addImagesToPost(postId, imageRequest);
+		return ResponseEntity.ok().body("addImages success");
 	}
 
 	@CheckOwner

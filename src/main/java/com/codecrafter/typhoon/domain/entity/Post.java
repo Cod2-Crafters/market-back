@@ -66,7 +66,7 @@ public class Post extends BaseEntity {
 	@OneToMany(mappedBy = "post", cascade = ALL)
 	private List<PostHashtag> postHashtagList = new ArrayList<>();
 
-	@OneToMany(mappedBy = "post", cascade = ALL)
+	@OneToMany(mappedBy = "post", cascade = PERSIST)
 	private List<PostImage> postImageList = new ArrayList<>();
 
 	public void setCategory(Category category) {
@@ -100,7 +100,7 @@ public class Post extends BaseEntity {
 		}
 	}
 
-	@Builder
+	@Builder(builderClassName = "")
 	public Post(Member member, String title, String content, Integer price) {
 		this.member = member;
 		this.title = title;
@@ -143,6 +143,21 @@ public class Post extends BaseEntity {
 			throw new IllegalArgumentException("price cannot be empty");
 		}
 		this.price = price;
+	}
+
+	@Builder(builderMethodName = "testBuilder")
+	public Post(Member member, Category category, String title, String content, PostStatus status,
+		Integer price,
+		boolean isDeleted, List<PostHashtag> postHashtagList, List<PostImage> postImageList) {
+		this.member = member;
+		this.category = category;
+		this.title = title;
+		this.content = content;
+		this.status = status;
+		this.price = price;
+		this.isDeleted = isDeleted;
+		this.postHashtagList = postHashtagList;
+		this.postImageList = postImageList;
 	}
 }
 
