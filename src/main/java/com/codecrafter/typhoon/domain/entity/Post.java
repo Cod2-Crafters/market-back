@@ -7,7 +7,9 @@ import static lombok.AccessLevel.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
@@ -63,10 +65,10 @@ public class Post extends BaseEntity {
 
 	private boolean isDeleted;
 
-	@OneToMany(mappedBy = "post", cascade = ALL)
-	private List<PostHashtag> postHashtagList = new ArrayList<>();
+	@OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+	private Set<PostHashtag> postHashtagList = new HashSet<>();
 
-	@OneToMany(mappedBy = "post", cascade = PERSIST)
+	@OneToMany(mappedBy = "post", cascade = PERSIST, orphanRemoval = true)
 	private List<PostImage> postImageList = new ArrayList<>();
 
 	public void setCategory(Category category) {
@@ -145,19 +147,5 @@ public class Post extends BaseEntity {
 		this.price = price;
 	}
 
-	@Builder(builderMethodName = "testBuilder")
-	public Post(Member member, Category category, String title, String content, PostStatus status,
-		Integer price,
-		boolean isDeleted, List<PostHashtag> postHashtagList, List<PostImage> postImageList) {
-		this.member = member;
-		this.category = category;
-		this.title = title;
-		this.content = content;
-		this.status = status;
-		this.price = price;
-		this.isDeleted = isDeleted;
-		this.postHashtagList = postHashtagList;
-		this.postImageList = postImageList;
-	}
 }
 

@@ -136,11 +136,21 @@ public class PostService {
 	public void addHashtagsToPost(Long postId, HashtagsRequest hashtagsRequest) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(NoPostException::new);
-		hashtagsRequest.hashtagList()
+		hashtagsRequest.hashTagList()
 			.stream()
 			.map(h -> hashtagRepository.findByTagName(h)
 				.orElseGet(() -> hashtagRepository.save(new Hashtag(h)))
 			).forEach(post::addPostHashtag);
+	}
+
+	public void removeHashtagsFromPost(Long postId, HashtagsRequest hashtagsRequest) {
+		Post post = postRepository.findPostByIdWithHashTags(postId)
+			.orElseThrow(NoPostException::new);
+		post.getPostHashtagList(). // TODO N+1
+			removeIf(ph -> {
+			return hashtagsRequest.hashTagList().contains(ph.getHashtag().getTagName());
+		});
+
 	}
 
 	/**
@@ -153,4 +163,13 @@ public class PostService {
 		PostImage postImage = imageRequest.toEntity();
 		post.addImages(postImage);
 	}
+
+	public void removePostImage(Long postId, Long postImageId) {
+		Post post = postRepository.findById(postId)
+			.orElseThrow(NoPostException::new);
+		post.getPostImageList()
+			.removeIf(postImage -> postImage.getId() == postImageId);
+
+	}
+
 }

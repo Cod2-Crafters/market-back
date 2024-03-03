@@ -1,7 +1,8 @@
 package com.codecrafter.typhoon.aop;
 
+import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Before;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -15,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 권한체크 aop
+ * 권한체크 aop, 쿼리가 2번나감
  */
 @Aspect
 @Component
@@ -25,8 +26,8 @@ public class CheckOwnerAop {
 
 	private final PostRepository postRepository;
 
-	@Before("@annotation(CheckOwner) && args(postId,..)")
-	public void checkPostOwner(Long postId) {
+	@Around("@annotation(CheckOwner) && args(postId,..)")
+	public Object checkPostOwner(ProceedingJoinPoint joinPoint, Long postId) throws Throwable {
 		log.info("test");
 		MockPrincipal principal = (MockPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -34,6 +35,9 @@ public class CheckOwnerAop {
 		if (!post.getMember().getId().equals(principal.getId())) {
 			throw new AccessDeniedException("권한이 없다고");
 		}
+		Object result = joinPoint.proceed();
+		log.info("test");
+		return result;
 
 	}
 

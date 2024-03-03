@@ -183,10 +183,10 @@ class PostServiceTest {
 		em.flush();
 		em.clear();
 		;
-		Post post = postRepository.findById(1L).orElseThrow(RuntimeException::new);
+		Post post = postRepository.findById(postId).orElseThrow(RuntimeException::new);
 		HashtagsRequest hashtagsRequest = new HashtagsRequest(List.of("추가된 해시태그1", "추가된해시태그2", "추가됞시태그3"));
 		postService.addHashtagsToPost(postId, hashtagsRequest);
-		assertThat(post.getPostHashtagList()).hasSize(size + hashtagsRequest.hashtagList().size());
+		assertThat(post.getPostHashtagList()).hasSize(size + hashtagsRequest.hashTagList().size());
 	}
 
 	@DisplayName("이미지 추가")

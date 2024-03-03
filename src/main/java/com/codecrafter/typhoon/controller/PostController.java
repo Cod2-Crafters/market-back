@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codecrafter.typhoon.aop.CheckOwner;
@@ -90,6 +91,7 @@ public class PostController {
 		return ResponseEntity.created(uri).body(uri);
 	}
 
+	@CheckOwner
 	@PatchMapping("/{postId}")
 	public ResponseEntity<?> updatePost(@PathVariable Long postId, @RequestBody PostUpdateRequest postUpdateRequest) {
 		Long id = postService.updatePost(postId, postUpdateRequest);
@@ -98,10 +100,17 @@ public class PostController {
 
 	@CheckOwner
 	@PostMapping("/{postId}/hashtags")
-	public ResponseEntity<?> addHashtag(@PathVariable Long postId, @RequestBody HashtagsRequest hashtagsRequest) {
+	public ResponseEntity<?> addHashtags(@PathVariable Long postId, @RequestBody HashtagsRequest hashtagsRequest) {
 		postService.addHashtagsToPost(postId, hashtagsRequest);
 
 		return ResponseEntity.ok().body("add hashtags success");
+	}
+
+	@CheckOwner
+	@PostMapping("/{postId}/hashtags/remove")
+	public ResponseEntity<?> removeHashtags(@PathVariable Long postId, @RequestBody HashtagsRequest hashtagsRequest) {
+		postService.removeHashtagsFromPost(postId, hashtagsRequest);
+		return ResponseEntity.ok().build();
 	}
 
 	@CheckOwner
@@ -109,6 +118,13 @@ public class PostController {
 	public ResponseEntity<?> addImage(@PathVariable Long postId, @RequestBody ImageRequest imageRequest) {
 		postService.addImagesToPost(postId, imageRequest);
 		return ResponseEntity.ok().body("addImages success");
+	}
+
+	@CheckOwner
+	@DeleteMapping("/{postId}/images")
+	public ResponseEntity<?> removeImage(@PathVariable Long postId, @RequestParam Long postImageId) {
+		postService.removePostImage(postId, postImageId);
+		return ResponseEntity.ok().build();
 	}
 
 	@CheckOwner

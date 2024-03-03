@@ -74,6 +74,6 @@ public class ExceptionController {
 	public ResponseEntity<?> except(Exception e) {
 		log.error("Error", e);
 		return ResponseEntity.status(HttpStatus.I_AM_A_TEAPOT).
-			body(e);
+			body(e.getMessage());
 	}
 }

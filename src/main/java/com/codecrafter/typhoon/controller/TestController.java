@@ -1,8 +1,11 @@
 package com.codecrafter.typhoon.controller;
 
+import static java.lang.Math.*;
+
 import java.io.File;
 import java.io.RandomAccessFile;
-import java.nio.charset.StandardCharsets;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,6 +49,10 @@ public class TestController {
 		return "이 문구는, 로그인한 유저만 볼 수 있음!!";
 	}
 
+	@Operation(summary = "JH님이 요청한 로그조회기능",
+		description = """
+			로그 파일 끝에서 최대 개행 200개읽고 개행 br로 바꿔서 리턴
+			""")
 	@GetMapping("/log")
 	public String getTodayLog() {
 		LocalDateTime now = LocalDateTime.now();
@@ -56,33 +64,41 @@ public class TestController {
 	}
 
 	public String readLastNLines(File file, int nLines) {
-		LinkedList<String> result = new LinkedList<>();
+		LinkedList<String> res = new LinkedList<>();
 		int readLines = 0;
-		try (RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");) {
-			long fileLength = file.length() - 1;
-			randomAccessFile.seek(fileLength);
+		try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
+			FileChannel channel = raf.getChannel();
 
-			for (long pointer = fileLength; pointer >= 0; pointer--) {
-				randomAccessFile.seek(pointer);
-				char c;
-				c = (char)randomAccessFile.read();
+			long fileSize = channel.size();
+			long bufferSize = min(fileSize, 8192);
+			long position = fileSize - bufferSize;
+			MappedByteBuffer buffer = channel.map(FileChannel.MapMode.READ_ONLY, position, bufferSize);
+
+			StringBuilder line = new StringBuilder();
+			for (long i = bufferSize - 1; i >= 0; i--) {
+				byte b = buffer.get((int)i);
+				char c = (char)b;
 				if (c == '\n') {
-					readLines++;
-					if (readLines == nLines)
-						break;
+					if (line.length() > 0) {
+						res.addFirst(line.reverse().toString());
+						line.setLength(0);
+						if (res.size() == nLines)
+							break;
+					}
+				} else {
+					line.append(c);
 				}
 			}
-
-			// Now reading the required lines
-			String line;
-			while ((line = randomAccessFile.readLine()) != null) {
-				result.add(new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8));
+			if (!line.isEmpty()) { // 버퍼에 남아있을때
+				res.addFirst(line.reverse().toString());
 			}
+
+			String result = String.join("<br>", res);
+			return result;
 		} catch (Exception e) {
 			throw new RuntimeException("로그파일읽다가 에러남" + e.getMessage());
 		}
 
-		return String.join("<br>", result);
 	}
 
 }

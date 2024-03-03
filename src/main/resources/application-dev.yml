@@ -1,5 +1,7 @@
 logging:
-  config:: classpath:tmp/logback-spring.xml
+  config: classpath:tmp/logback-spring.xml
+  level:
+    root: warn
 
 
 
@@ -29,9 +31,10 @@ spring:
     properties:
       hibernate:
         default_batch_fetch_size: 50
-
+        show_sql: false
     defer-datasource-initialization: true
     open-in-view: false
+    show-sql: false
 
   sql:
     init:
