@@ -1,3 +1,15 @@
+#
+logging:
+  level:
+    org:
+    #      springframework.transaction.interceptor: trace
+    #      hibernate.sql: debug
+    root: info
+    com.codecrafter.typhoon.config.filter.RequestLoggingFilter: Info
+
+
+
+
 server:
   port: 8080
 
@@ -37,11 +49,6 @@ file:
     dir: ${user.home}/fileStore/
 
 
-#
-logging:
-  level:
-    org:
-      hibernate.sql: debug
 
 
 

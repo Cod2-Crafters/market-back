@@ -16,7 +16,8 @@ import com.codecrafter.typhoon.domain.entity.Category;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.entity.Post;
 import com.codecrafter.typhoon.domain.entity.PostImage;
-import com.codecrafter.typhoon.domain.request.PostCreateRequest;
+import com.codecrafter.typhoon.domain.request.post.ImageRequest;
+import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
 import com.codecrafter.typhoon.repository.category.CategoryRepository;
 import com.codecrafter.typhoon.repository.member.MemberRepository;
 import com.codecrafter.typhoon.repository.post.PostRepository;
@@ -48,8 +49,8 @@ public class TmpInitService implements ApplicationRunner {
 	private PostCreateRequest createPostRequest(int num) {
 		int idx = random.nextInt(CATEGORIES.size());
 		Long categoryId = CATEGORIES.get(idx);
-		List<PostCreateRequest.ImageRequest> images = IntStream.range(0, num)
-			.mapToObj(i -> new PostCreateRequest.ImageRequest("/test" + i, i == 0))
+		List<ImageRequest> images = IntStream.range(0, num)
+			.mapToObj(i -> new ImageRequest("/test" + i, i == 0))
 			.collect(Collectors.toList());
 
 		String title = "this is title " + num;

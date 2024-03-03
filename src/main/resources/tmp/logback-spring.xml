@@ -16,7 +16,8 @@
             </rollingPolicy>
         </appender>
 
-
+        <logger name="com.codecrafter.typhoon.config.filter.RequestLoggingFilter" level="INFO"/>
+        ]
         <root level="warn">
             <appender-ref ref="FILE-INFO"/>
         </root>

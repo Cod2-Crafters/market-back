@@ -21,7 +21,9 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
 import com.codecrafter.typhoon.config.UserPrincipal;
 import com.codecrafter.typhoon.domain.entity.Member;
-import com.codecrafter.typhoon.domain.request.PostCreateRequest;
+import com.codecrafter.typhoon.domain.request.post.ImageRequest;
+import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
+import com.codecrafter.typhoon.repository.PostImageRepository;
 import com.codecrafter.typhoon.repository.hashtag.HashtagRepository;
 import com.codecrafter.typhoon.repository.member.MemberRepository;
 import com.codecrafter.typhoon.repository.post.PostRepository;
@@ -54,6 +56,9 @@ class PostControllerTest {
 	@Autowired
 	private PostService postService;
 
+	@Autowired
+	private PostImageRepository postImageRepository;
+
 	Member getSavedMember() {
 		Member member = Member.builder()
 			.email("email@email.com")
@@ -73,6 +78,8 @@ class PostControllerTest {
 
 	@AfterEach
 	void clean() {
+
+		postImageRepository.deleteAll();
 		postRepository.deleteAll();
 		postRepository.physicalDeleteForTest();
 		hashtagRepository.deleteAll();
@@ -81,8 +88,8 @@ class PostControllerTest {
 	}
 
 	private PostCreateRequest createPostRequest() {
-		List<PostCreateRequest.ImageRequest> collect = IntStream.range(0, 10)
-			.mapToObj(i -> new PostCreateRequest.ImageRequest("/test" + i, i == 0))
+		List<ImageRequest> collect = IntStream.range(0, 10)
+			.mapToObj(i -> new ImageRequest("/test" + i, i == 0))
 			.toList();
 
 		PostCreateRequest postCreateRequest = new PostCreateRequest(

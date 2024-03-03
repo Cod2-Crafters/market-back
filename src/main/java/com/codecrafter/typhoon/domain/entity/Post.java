@@ -7,7 +7,9 @@ import static lombok.AccessLevel.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
@@ -63,10 +65,10 @@ public class Post extends BaseEntity {
 
 	private boolean isDeleted;
 
-	@OneToMany(mappedBy = "post", cascade = ALL)
-	private List<PostHashtag> postHashtagList = new ArrayList<>();
+	@OneToMany(mappedBy = "post", cascade = ALL, orphanRemoval = true)
+	private Set<PostHashtag> postHashtagList = new HashSet<>();
 
-	@OneToMany(mappedBy = "post", cascade = ALL)
+	@OneToMany(mappedBy = "post", cascade = PERSIST, orphanRemoval = true)
 	private List<PostImage> postImageList = new ArrayList<>();
 
 	public void setCategory(Category category) {
@@ -100,7 +102,7 @@ public class Post extends BaseEntity {
 		}
 	}
 
-	@Builder
+	@Builder(builderClassName = "")
 	public Post(Member member, String title, String content, Integer price) {
 		this.member = member;
 		this.title = title;
@@ -115,5 +117,35 @@ public class Post extends BaseEntity {
 			.findFirst()
 			.orElse("이미지가 없어 ㅠㅠㅠㅠ");
 	}
+
+	public void updateTitle(String title) {
+		if (title == null || title.isEmpty()) {
+			throw new IllegalArgumentException("TITLE cannot be empty");
+		}
+
+		this.title = title;
+	}
+
+	public void updateContent(String content) {
+		if (content == null || content.isEmpty()) {
+			throw new IllegalArgumentException("content cannot be empty");
+		}
+		this.content = content;
+	}
+
+	public void updateStatus(PostStatus postStatus) {
+		if (postStatus == null) {
+			throw new IllegalArgumentException("postStatus cannot be empty");
+		}
+		this.status = postStatus;
+	}
+
+	public void updatePrice(Integer price) {
+		if (price == null) {
+			throw new IllegalArgumentException("price cannot be empty");
+		}
+		this.price = price;
+	}
+
 }
 

@@ -1,8 +1,6 @@
-package com.codecrafter.typhoon.domain.request;
+package com.codecrafter.typhoon.domain.request.post;
 
 import java.util.List;
-
-import com.codecrafter.typhoon.domain.entity.PostImage;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -27,9 +25,4 @@ public record PostCreateRequest(
 	Integer price
 ) {
 
-	public static record ImageRequest(String imagePath, Boolean isThumbnail) {
-		public PostImage toEntity() {
-			return PostImage.createPostImage(imagePath(), isThumbnail());
-		}
-	}
 }
