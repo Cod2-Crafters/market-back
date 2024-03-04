@@ -1,5 +1,7 @@
 package com.codecrafter.typhoon.service;
 
+import static com.codecrafter.typhoon.CustomUtils.*;
+
 import java.util.List;
 
 import org.springframework.data.domain.Pageable;
@@ -18,7 +20,8 @@ public class HashtagService {
 	private final HashtagRepository hashtagRepository;
 
 	public List<String> getSuggestedHashtags(String input, Pageable pageable) {
-		List<String> similarTagNames = hashtagRepository.findSimilarTagNames(input, pageable);
+		String chosungString = getChosungString(input);
+		List<String> similarTagNames = hashtagRepository.findSimilarTagNames(input, chosungString, pageable);
 		return similarTagNames;
 	}
 

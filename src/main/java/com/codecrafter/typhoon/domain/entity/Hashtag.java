@@ -1,5 +1,6 @@
 package com.codecrafter.typhoon.domain.entity;
 
+import static com.codecrafter.typhoon.CustomUtils.*;
 import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
@@ -34,12 +35,16 @@ public class Hashtag {
 	@Comment("생성일자")
 	private LocalDateTime createdAt;
 
+	@Comment("초성")
+	private String chosung;
+
 	public void addPostHashtag(PostHashtag postHashtag) {
 		postHashtagSet.add(postHashtag);
 	}
 
 	public Hashtag(String tagName) {
 		this.tagName = tagName;
+		this.chosung = getChosungString(tagName);
 	}
 
 	@Override

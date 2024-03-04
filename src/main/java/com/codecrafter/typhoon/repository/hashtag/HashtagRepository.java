@@ -17,7 +17,9 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 	@Query("""
 		select h.tagName from Hashtag h
 		where h.tagName like %:input%
+		or h.chosung like %:chosungString%
 		""")
-	List<String> findSimilarTagNames(@Param("input") String input, Pageable pageable);
+	List<String> findSimilarTagNames(@Param("input") String input, @Param("chosungString") String chosungString,
+		Pageable pageable);
 
 }
