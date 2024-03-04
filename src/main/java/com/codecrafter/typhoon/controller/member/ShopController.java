@@ -34,9 +34,11 @@ public class ShopController {
 	private final MemberService memberService;
 
 	@Operation(summary = "상점목록 조회(페이징)",
-		description = "★상점 전체목록 조회</br>"
-			+ "page = 숫자 / size = 숫자 / sort = 정렬할 필드명(id, craterAt, ...)</br>"
-			+ "{host}/api/shop/list?page=1")
+		description = 	"""
+      					★상점 전체목록 조회</br>
+						page = 숫자 / size = 숫자 / sort = 정렬할 필드명(id, craterAt, ...)</br>
+						{host}/api/shop/list?page=1
+						""")
 	@GetMapping("/list")
 	public ResponseEntity<?> getShopList(
 		@PageableDefault(sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -44,37 +46,23 @@ public class ShopController {
 		return ResponseEntity.ok().body(shopList);
 	}
 
-	@Operation(summary = "상점 정보 조회",
-		description = "★개인 상점 조회</br>"
-			+ "MemberId = 숫자</br>"
-			+ "{host}/api/shop/1")
+	
 	@GetMapping("/{memberId}")
 	public ResponseEntity<ShopResponse> getShopInfo(@PathVariable Long memberId) {
 		ShopResponse shopResponse = authService.getShopInfo(memberId);
 		return ResponseEntity.ok().body(shopResponse);
 	}
 
-	@Operation(summary = "내상점 화면 조회",
-		description = "★로그인한 회원의 상점 관리 화면을 조회</br>"
-			+ "MemberId = 숫자</br>"
-			+ "{host}/api/shop/1/shop")
-	@ApiResponses(value = {
-		@ApiResponse(responseCode = "200", description = "ok"),
-		@ApiResponse(responseCode = "400", description = "bad request"),
-		@ApiResponse(responseCode = "404", description = "not found")})
-	@GetMapping("/{memberId}/shop")
-	public ResponseEntity<?> getMyShop(@PathVariable Long memberId) {
-		return ResponseEntity.ok().body("getMyShop");
-	}
-
 	@Operation(summary = "내상점 수정",
-		description = "★내상점정보 수정(상점명, 상점설명)</br>"
-			+ "MemberId = 숫자</br>"
-			+ "shopName = 상점명(문자) / description = 상점설명(문자)</br>"
-			+ "{</br>"
-			+ "  \"shopName\": \"천둥마켓\",</br>"
-			+ "  \"description\": \"태풍마켓에서 변경.\"</br>"
-			+ "}")
+		description =	"""
+						★내상점정보 수정(상점명, 상점설명)</br>
+						MemberId = 숫자</br>
+						shopName = 상점명(문자) / description = 상점설명(문자)</br>
+						{</br>
+							"shopName": "천둥마켓",</br>
+							"description": "태풍마켓에서 변경."</br>
+						}
+						""")
 	@PutMapping("/{memberId}/shop")
 	public ResponseEntity<?> updateShop() {
 		return ResponseEntity.ok().body("updateShop");

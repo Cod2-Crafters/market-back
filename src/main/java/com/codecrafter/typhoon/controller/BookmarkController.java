@@ -28,8 +28,10 @@ public class BookmarkController {
 	private final BookmarkService bookmarkService;
 
 	@Operation(summary = "북마크 조회",
-			description = "★등록한 북마크 목록 조회</br>"
-						+ "{host}/api/bookmark/me")
+			description = 	"""
+       						★등록한 북마크 목록 조회</br>
+							{host}/api/bookmark/me
+							""")
 	@GetMapping("/me")
 	public ResponseEntity<?> myBookmark(@AuthenticationPrincipal MockPrincipal principal) {
 		List<BookmarkResponse> myBookmark = bookmarkService.getMyBookmark(principal.getId());
@@ -37,8 +39,10 @@ public class BookmarkController {
 	}
 
 	@Operation(summary = "북마크 등록",
-			description = "★타상점에 북마크 추가</br>"
-						+ "PostId = 숫자")
+			description = 	"""
+      						★타상점에 북마크 추가</br>
+							PostId = 숫자
+							""")
 	@PostMapping("/{postId}")
 	public ResponseEntity<Void> addBookmark(@PathVariable Long postId, @CurrentMember Member me) {
 		bookmarkService.addBookmark(me, postId);
@@ -46,8 +50,10 @@ public class BookmarkController {
 	}
 
 	@Operation(summary = "북마크 취소",
-			description = "★등록한 북마크 삭제</br>"
-						+ "PostId = 숫자")
+			description = 	"""
+      						★등록한 북마크 삭제</br>
+							PostId = 숫자
+							""")
 	@DeleteMapping("/{postId}")
 	public ResponseEntity<?> removeBookmark(@PathVariable Long postId, @CurrentMember Member me) {
 		bookmarkService.deleteBookmark(me, postId);

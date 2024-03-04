@@ -2,6 +2,7 @@ package com.codecrafter.typhoon.controller;
 
 import java.net.URI;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +23,11 @@ public class FileController {
 
 	private final FileService fileService;
 
+	@Operation(summary = "파일 업로드",
+			description = 	"""
+      						★파일 단/다건 업로드</br>
+      						return success
+							""")
 	@PostMapping("/upload")
 	public ResponseEntity<String> saveFile(@RequestParam MultipartFile file) throws Exception {
 		URI uri = fileService.storeFile(file);
