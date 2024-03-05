@@ -87,6 +87,9 @@ public class Post extends BaseEntity {
 	 */
 	public void addImages(PostImage... postImages) {
 		for (PostImage postImage : postImages) {
+			if (postImage.isThumbnail()) {
+				refreshThumbnail();
+			}
 			this.postImageList.add(postImage);
 			postImage.setPost(this);
 		}
@@ -97,9 +100,17 @@ public class Post extends BaseEntity {
 	 */
 	public void addImages(Collection<? extends PostImage> postImages) {
 		for (PostImage postImage : postImages) {
+			if (postImage.isThumbnail()) {
+				refreshThumbnail();
+			}
 			this.postImageList.add(postImage);
 			postImage.setPost(this);
 		}
+	}
+
+	private void refreshThumbnail() {
+		this.postImageList
+			.forEach(p -> p.setThumbnail(false));
 	}
 
 	@Builder(builderClassName = "")

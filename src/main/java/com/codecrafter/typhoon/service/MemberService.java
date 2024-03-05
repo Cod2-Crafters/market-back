@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.codecrafter.typhoon.domain.entity.Member;
+import com.codecrafter.typhoon.domain.response.PostShopResponse;
 import com.codecrafter.typhoon.domain.response.member.SimpleShopResponse;
 import com.codecrafter.typhoon.repository.member.MemberRepository;
 
@@ -31,5 +32,10 @@ public class MemberService {
 			.toList();
 
 		return list;
+	}
+
+	public PostShopResponse getPostShop(Long memberId) {
+		PostShopResponse postShop = memberRepository.getPostShop(memberId);
+		return postShop;
 	}
 }

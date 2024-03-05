@@ -80,7 +80,7 @@ public class TmpInitService implements ApplicationRunner {
 			.orElseThrow(RuntimeException::new);
 		post.addImages(
 			List.of(
-				PostImage.createPostImage("/api/file/static/test1.jpeg", true),
+				PostImage.createPostImage("/api/file/static/test1.jpeg", false),
 				PostImage.createPostImage("/api/file/static/tes2.jpeg", false),
 				PostImage.createPostImage("/api/file/static/test3.jpeg", false),
 				PostImage.createPostImage("/api/file/static/test4.jpeg", false),
