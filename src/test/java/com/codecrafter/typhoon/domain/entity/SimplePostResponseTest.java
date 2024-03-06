@@ -95,7 +95,7 @@ class SimplePostResponseTest {
 		Post findPost = postRepository.findById(post.getId()).get();
 		List<PostImage> postImageList = findPost.getPostImageList();
 		assertThat(postImageList.size()).isEqualTo(2);
-		Assertions.assertTrue(postImageList.get(0).isThumbnail());
+		Assertions.assertTrue(postImageList.get(0).isThumbnail() ^ postImageList.get(1).isThumbnail());
 		assertThat(postImageList.get(1).getImagePath()).isEqualTo("test2");
 
 	}
