@@ -33,4 +33,5 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 			 where p.id = :postId
 		""")
 	Optional<Post> findPostByIdWithHashTags(@Param("postId") Long postId);
+
 }

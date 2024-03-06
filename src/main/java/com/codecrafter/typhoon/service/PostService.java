@@ -20,6 +20,7 @@ import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
 import com.codecrafter.typhoon.domain.response.post.SimplePostResponse;
 import com.codecrafter.typhoon.exception.NoPostException;
 import com.codecrafter.typhoon.exception.NotExistException;
+import com.codecrafter.typhoon.repository.BookmarkRepository;
 import com.codecrafter.typhoon.repository.category.CategoryRepository;
 import com.codecrafter.typhoon.repository.hashtag.HashtagRepository;
 import com.codecrafter.typhoon.repository.post.PostRepository;
@@ -38,6 +39,8 @@ public class PostService {
 	private final HashtagRepository hashtagRepository;
 
 	private final CategoryRepository categoryRepository;
+
+	private final BookmarkRepository bookmarkRepository;
 
 	/**
 	 * 포스트 생성 로직
@@ -89,6 +92,10 @@ public class PostService {
 			.stream().map(postHashtag -> postHashtag.getHashtag().getTagName())
 			.toList();
 		postDetailResponse.setHashtagList(hashtagList);
+
+		int bookmarkCount = bookmarkRepository.countByPostId(postId);
+		postDetailResponse.setBookmarkCount(bookmarkCount);
+
 		return postDetailResponse;
 	}
 

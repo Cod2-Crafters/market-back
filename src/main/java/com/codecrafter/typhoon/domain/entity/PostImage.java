@@ -15,6 +15,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -33,6 +34,7 @@ public class PostImage {
 	@Comment("이미지경로")
 	private String imagePath;
 
+	@Setter
 	@ColumnDefault("false")
 	@Comment("섬네일 여부")
 	private boolean isThumbnail;
