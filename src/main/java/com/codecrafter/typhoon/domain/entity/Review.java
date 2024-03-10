@@ -4,7 +4,6 @@ import static jakarta.persistence.FetchType.*;
 import static lombok.AccessLevel.*;
 
 import org.hibernate.annotations.ColumnDefault;
-import org.hibernate.annotations.SQLDelete;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,7 +18,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = PROTECTED)
-@SQLDelete(sql = "")
 public class Review extends BaseEntity {
 
 	@Id

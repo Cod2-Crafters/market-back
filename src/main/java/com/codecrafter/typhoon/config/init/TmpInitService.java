@@ -1,4 +1,4 @@
-package com.codecrafter.typhoon.service;
+package com.codecrafter.typhoon.config.init;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,6 +21,8 @@ import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
 import com.codecrafter.typhoon.repository.category.CategoryRepository;
 import com.codecrafter.typhoon.repository.member.MemberRepository;
 import com.codecrafter.typhoon.repository.post.PostRepository;
+import com.codecrafter.typhoon.service.MemberService;
+import com.codecrafter.typhoon.service.PostService;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-@Profile("!test")
+@Profile("default")
 public class TmpInitService implements ApplicationRunner {
 	private final MemberRepository memberRepository;
 	private final MemberService memberService;
