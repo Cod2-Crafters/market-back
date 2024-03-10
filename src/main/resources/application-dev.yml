@@ -1,6 +1,4 @@
-logging:
-  level:
-    root: info
+#logging:
 #  config: classpath:tmp/logback-spring.xml
 #  level:
 #    root: warn
@@ -24,7 +22,7 @@ spring:
     hibernate:
       naming:
         physical-strategy: com.codecrafter.typhoon.config.CustomUpperCaseSnakeCasePhysicalNamingStrategy
-      ddl-auto: none
+      ddl-auto: validate
     properties:
       hibernate:
         default_batch_fetch_size: 50
@@ -33,7 +31,7 @@ spring:
 
   sql:
     init:
-      mode: always
+      mode: never
       schema-locations: classpath:dev/schema.sql
       data-locations: classpath:dev/data.sql
 file:

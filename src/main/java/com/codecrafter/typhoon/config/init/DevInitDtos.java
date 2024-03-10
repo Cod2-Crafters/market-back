@@ -35,7 +35,5 @@ public class DevInitDtos {
 	) {
 	}
 
-	public record TmpPost(
 
-	)
 }

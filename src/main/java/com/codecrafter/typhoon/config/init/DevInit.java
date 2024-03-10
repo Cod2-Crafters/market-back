@@ -21,11 +21,14 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * dev (베포나 마찬가지임) 초기 데이터 설정
+ *
+ * @deprecated 그냥 SQL로 인서트하는걸로 변경
  */
 @Component
 @Profile("dev")
 @Slf4j
 @RequiredArgsConstructor
+@Deprecated
 public class DevInit implements ApplicationRunner {
 
 	private final JdbcTemplate jdbcTemplate;
@@ -36,10 +39,10 @@ public class DevInit implements ApplicationRunner {
 
 	@Override
 	public void run(ApplicationArguments args) throws Exception {
-		log.info("INSERT_MEMBER");
-		insertTmpMember();
-		log.info("INSERT_FOLLOW");
-		insertTmpFollow();
+		// log.info("INSERT_MEMBER");
+		// insertTmpMember();
+		// log.info("INSERT_FOLLOW");
+		// insertTmpFollow();
 	}
 
 	/**
