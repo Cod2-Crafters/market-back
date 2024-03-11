@@ -28,13 +28,15 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.springframework.boot:spring-boot-starter-validation' // validation
 
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
     runtimeOnly 'com.h2database:h2' //테스트용 h2
     runtimeOnly 'com.mysql:mysql-connector-j' //실제 db
-    implementation 'org.springframework.boot:spring-boot-starter-validation' // validation
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 
     // swagger
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
@@ -60,7 +62,7 @@ dependencies {
     testImplementation 'org.springframework.security:spring-security-test'
 
 
-    implementation('com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0') // 쿼리 로그/**/ 남기기
+//    implementation('com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0') // 쿼리 로그/**/ 남기기
 
 
 }
