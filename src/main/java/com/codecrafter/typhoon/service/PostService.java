@@ -42,6 +42,8 @@ public class PostService {
 
 	private final BookmarkRepository bookmarkRepository;
 
+	private final RedisService redisService;
+
 	/**
 	 * 포스트 생성 로직
 	 *
