@@ -72,7 +72,7 @@ public class PostDetailResponse {
 
 	@Setter
 	/** 조회수*/
-	private Long views;
+	private Long viewCount;
 
 	public PostDetailResponse(Post post) {
 		this.id = post.getId();
