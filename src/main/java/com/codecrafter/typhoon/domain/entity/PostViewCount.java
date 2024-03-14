@@ -1,12 +1,12 @@
 package com.codecrafter.typhoon.domain.entity;
 
+import static jakarta.persistence.GenerationType.*;
 import static lombok.AccessLevel.*;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.UpdateTimestamp;
+import java.time.LocalDate;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -20,23 +20,29 @@ import lombok.ToString;
 public class PostViewCount {
 
 	@Id
+	@GeneratedValue(strategy = IDENTITY)
+	private Long id;
+
 	private Long postId;
 
 	private Long viewCount = 0L;
 
-	@UpdateTimestamp
-	private LocalDateTime lastViewedAt;
+	private LocalDate viewDay;
 
-	public void incrementViewCount(long viewCount) {
-		this.viewCount += viewCount;
-	}
-
-	private PostViewCount(Long postId) {
-		this.postId = postId;
-	}
-
-	public static PostViewCount from(Long postId) {
-		return new PostViewCount(postId);
+	/**
+	 * 유일하게 생성 가능
+	 *
+	 * @param postId    postId
+	 * @param viewCount 조회수
+	 * @param viewDay   날짜 (배치로돌면 어제일거임)
+	 * @return
+	 */
+	public static PostViewCount of(Long postId, Long viewCount, LocalDate viewDay) {
+		PostViewCount postViewCount = new PostViewCount();
+		postViewCount.postId = postId;
+		postViewCount.viewCount = viewCount;
+		postViewCount.viewDay = viewDay;
+		return postViewCount;
 	}
 
 }

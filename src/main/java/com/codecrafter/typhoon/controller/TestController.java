@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.codecrafter.typhoon.service.RedisService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -99,6 +101,13 @@ public class TestController {
 			throw new RuntimeException("로그파일읽다가 에러남" + e.getMessage());
 		}
 
+	}
+
+	private final RedisService redisService;
+
+	@RequestMapping("/mytest")
+	public void test() {
+		redisService.persistAllDailyPostViewCountToDB();
 	}
 
 }
