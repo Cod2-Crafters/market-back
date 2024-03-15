@@ -62,7 +62,7 @@ public class RedisService {
 	/**
 	 * 매 00시에 돌면서, 전날의 Redis에 있던 데이터를 DB에 넣고, zset 초기화화
 	 */
-	@Scheduled(cron = "0 08 23 * * *")
+	@Scheduled(cron = "0 0 0 * * *")
 	public void persistAllDailyPostViewCountToDB() {
 		log.warn("DAILY PERSIST START");
 		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
