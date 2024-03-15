@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codecrafter.typhoon.service.RedisService;
+import com.codecrafter.typhoon.repository.post.PostRepository;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
@@ -103,11 +103,11 @@ public class TestController {
 
 	}
 
-	private final RedisService redisService;
+	private final PostRepository postRepository;
 
-	@RequestMapping("/mytest")
-	public void test() {
-		redisService.persistAllDailyPostViewCountToDB();
-	}
+	// @RequestMapping("/mytest")
+	// public void test() {
+	// 	postRepository.getTotalPostViewCount(1);
+	// }
 
 }

@@ -87,6 +87,7 @@ public class PostService {
 	 * @return PostDetailResponse
 	 */
 	public PostDetailResponse getPostDetail(Long postId) {
+
 		Post post = postRepository.findPostWithMemberById(postId)
 			.orElseThrow(NoPostException::new);
 		PostDetailResponse postDetailResponse = new PostDetailResponse(post);
@@ -94,6 +95,9 @@ public class PostService {
 			.stream().map(postHashtag -> postHashtag.getHashtag().getTagName())
 			.toList();
 		postDetailResponse.setHashtagList(hashtagList);
+
+		Long totalPostViewCount = postRepository.getTotalPostViewCount(postId);
+		postDetailResponse.setViewCount(totalPostViewCount);
 
 		int bookmarkCount = bookmarkRepository.countByPostId(postId);
 		postDetailResponse.setBookmarkCount(bookmarkCount);
@@ -178,7 +182,6 @@ public class PostService {
 			.orElseThrow(NoPostException::new);
 		post.getPostImageList()
 			.removeIf(postImage -> postImage.getId() == postImageId);
-
 	}
 
 }

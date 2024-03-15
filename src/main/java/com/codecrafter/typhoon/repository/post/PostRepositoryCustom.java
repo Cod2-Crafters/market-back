@@ -4,4 +4,6 @@ public interface PostRepositoryCustom {
 
 	// Slice<Post> getPostList(Pageable pageable);
 
+	Long getTotalPostViewCount(long postId);
+
 }

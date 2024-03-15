@@ -58,10 +58,9 @@ public class PostController {
 	@GetMapping("/{postId}")
 	public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable Long postId, HttpServletRequest request) {
 		PostDetailResponse postDetail = postService.getPostDetail(postId);
-		String clientIp = request.getRemoteAddr();
+		String clientIp = request.getRemoteAddr().replace(":", "");
 		Long viewCount = redisService.increaseDailyPostViewCount(postId, clientIp);
 		postDetail.setViewCount(viewCount);
-		log.info("viewCount: {}", viewCount);
 		return ResponseEntity.ok().body(postDetail);
 	}
 

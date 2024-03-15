@@ -1,8 +1,6 @@
 package com.codecrafter.typhoon.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -25,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RedisService {
 
-	private final String LAST_ONE_HOUR = "last:one:hour:";
+	private final String POST_VISIT_IP_KEY_10m = "post:%s:visit10m:ip:%s";
 
 	private static final String DAILY_POST_VIEW_COUNT = "daily:post:view:count:";
 
@@ -34,7 +32,7 @@ public class RedisService {
 	private final StringRedisTemplate redisTemplate;
 
 	public Long increaseDailyPostViewCount(Long postId, String clientIp) {
-		if (hasNotVisitedInLastHour(postId, clientIp)) {
+		if (hasNotVisitedInLast10m(postId, clientIp)) {
 			Double score = redisTemplate.opsForZSet()
 				.incrementScore(DAILY_POST_VIEW_COUNT, String.valueOf(postId), 1);
 			return score == null ? 0 : score.longValue();
@@ -47,18 +45,26 @@ public class RedisService {
 		return score != null ? score.longValue() : 0;
 	}
 
-	private boolean hasNotVisitedInLastHour(Long postId, String clientIp) {
-		String key = LAST_ONE_HOUR + postId + ":" + clientIp;
-		Boolean visited = redisTemplate.opsForValue().setIfAbsent(key, "0", 1, TimeUnit.HOURS);
-		return visited;  //TODO: return visited;
-		// return !visited;
+	/**
+	 * 10분마다 조회수가 올라가도록
+	 *
+	 * @param postId   postId
+	 * @param clientIp IP
+	 * @return
+	 */
+	private boolean hasNotVisitedInLast10m(Long postId, String clientIp) {
+		String key = POST_VISIT_IP_KEY_10m + postId + ":" + clientIp;
+		Boolean visited = redisTemplate.opsForValue().setIfAbsent(key, "0", 10, TimeUnit.MINUTES);
+		//TODO: return visited;
+		return true;
 	}
 
 	/**
-	 * 매 00시에 돌면서, 전날의 Redis에 있던 데이터를 DB에 넣는 스케줄링링
+	 * 매 00시에 돌면서, 전날의 Redis에 있던 데이터를 DB에 넣고, zset 초기화화
 	 */
-	@Scheduled(fixedRate = 3000)
+	@Scheduled(cron = "0 08 23 * * *")
 	public void persistAllDailyPostViewCountToDB() {
+		log.warn("DAILY PERSIST START");
 		ZSetOperations<String, String> zSetOperations = redisTemplate.opsForZSet();
 		Set<ZSetOperations.TypedTuple<String>> viewCounts = zSetOperations.rangeWithScores(DAILY_POST_VIEW_COUNT, 0,
 			-1);
@@ -67,7 +73,7 @@ public class RedisService {
 
 		if (viewCounts == null)
 			return;
-
+		int successCnt = 0;
 		for (ZSetOperations.TypedTuple<String> viewCount : viewCounts) {
 			try {
 				long postId = Long.parseLong(viewCount.getValue());
@@ -75,12 +81,15 @@ public class RedisService {
 
 				PostViewCount postViewCount = PostViewCount.of(postId, count, yesterday);
 				postViewCountRepository.save(postViewCount);
+				successCnt++;
 			} catch (Exception e) {
 				log.error("문제발생", e);
 			}
 		}
 
-		log.info("finished at {}", LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME));
+		redisTemplate.delete(DAILY_POST_VIEW_COUNT);
+		log.warn("DAILY PERSIST END, SUCCESS COUNT={}", successCnt);
+		//TODO Zset 초기화, 조회수 상품에 추가 등등
 	}
 
 }
