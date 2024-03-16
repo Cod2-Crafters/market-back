@@ -17,62 +17,45 @@ import lombok.ToString;
 @Getter
 @ToString
 public class PostDetailResponse {
-	/**
-	 * postId
-	 */
+	/* postId */
 	private Long id;
-	/**
-	 * 간단유저정보
-	 */
+	/* 간단유저정보 */
 	private SimpleMemberResponse member;
-	/**
-	 * 제목
-	 */
+	/* 제목 */
 	private String title;
-	/**
-	 * 내용
-	 */
+	/* 내용 */
 	private String content;
-	/**
-	 * 판매상태
-	 */
+	/* 판매상태 */
 	private PostStatus status;
-	/**
-	 * 가격
-	 */
+	/* 가격 */
 	private Integer price;
-	/**
-	 * 삭제여부
-	 */
+
+	/* 삭제여부 */
 	private boolean isDeleted;
-	/**
-	 * 이미지들
-	 */
+
+	/* 이미지들 */
 	private List<SimplePostImageResponse> ImageList;
-	/**
-	 * 생성시간
-	 */
+	/* 생성시간 */
 	private LocalDateTime createdAt;
-	/**
-	 * 마지막 수정시간
-	 */
+
+	/* 마지막 수정시간 */
 	private LocalDateTime modifyedAt;
 
-	/**
-	 * 해시태그 목록
-	 */
+	/* 해시태그*/
 	@Setter
 	private List<String> hashtagList;
 
-	/**
-	 * 이 상품을 북마크한 수
-	 */
+	/*이 상품을 북마크한 수 */
 	@Setter
 	private int bookmarkCount;
 
 	@Setter
-	/** 조회수*/
-	private Long views;
+	/* 총 조회수 */
+	private Long totalViewCount;
+
+	/* 오늘조회수 */
+	@Setter
+	private Long todayViewCount;
 
 	public PostDetailResponse(Post post) {
 		this.id = post.getId();

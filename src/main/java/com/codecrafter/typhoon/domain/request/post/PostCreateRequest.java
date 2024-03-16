@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 /**
- * SimplePostResponse 생성시 받는 request 객체
+ * SimplePostDto 생성시 받는 request 객체
  *
  * @param title                제목
  * @param content              내용

@@ -3,6 +3,7 @@ package com.codecrafter.typhoon.controller.member;
 import static org.springframework.http.HttpStatus.*;
 
 import io.swagger.v3.oas.annotations.Operation;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -40,9 +41,9 @@ public class AuthController {
 	private final JWTService jwtService;
 
 	@Operation(summary = "회원가입",
-			description = 	"""
-							★본인인증 회원가입
-							""")
+		description = """
+			★본인인증 회원가입
+			""")
 	@PostMapping("/signup")
 	public ResponseEntity<?> signUp(@RequestBody @Valid SignupRequest signupRequest) {
 		log.info("signupRequest={}", signupRequest);
@@ -51,27 +52,27 @@ public class AuthController {
 	}
 
 	@Operation(summary = "이메일 중복체크",
-			description = 	"""
-							★회원가입시 이메일 중복 검사
-							""")
+		description = """
+			★회원가입시 이메일 중복 검사
+			""")
 	@GetMapping("/email-check")
 	public void checkEmailDuplication(@RequestParam("value") String email) {
 		authService.existsByEmail(email);
 	}
 
 	@Operation(summary = "상점명 중복체크",
-			description = 	"""
-							★회원가입시 상점이름 중복 검사
-							""")
+		description = """
+			★회원가입시 상점이름 중복 검사
+			""")
 	@GetMapping("/shopname-check")
 	public void checkShopNameDuplication(@RequestParam("value") String email) {
 		authService.existsByEmail(email);
 	}
 
 	@Operation(summary = "세션 연장",
-			description = 	"""
-							★인증정보를 바탕으로 신규 토큰 발급
-							""")
+		description = """
+			★인증정보를 바탕으로 신규 토큰 발급
+			""")
 	@PostMapping("/refresh")
 	public ResponseEntity<?> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
 		String refreshToken = refreshTokenRequest.refreshToken();
@@ -96,27 +97,26 @@ public class AuthController {
 	}
 
 	@Operation(summary = "상점 정보 조회",
-			description = 	"""
-							★개인 상점 조회</br>
-							MemberId = 숫자</br>
-							{host}/api/auth/myinfo
-							""")
+		description = """
+			★개인 상점 조회</br>
+			MemberId = 숫자</br>
+			{host}/api/auth/myinfo
+			""")
 	@GetMapping("/myinfo")
 	public ResponseEntity<MyInfoResponse> getMyInfo(@CurrentMember Member me) {
 		MyInfoResponse myInfoResponse = new MyInfoResponse(me);
 		return ResponseEntity.ok(myInfoResponse);
 	}
 
-
 	@Operation(summary = "상점 정보 수정",
-			description = 	"""
-							★개인 상점 수정</br>
-							{
-							  "shopName": "지진마켓",</br>
-							  "description": "태풍마켓에서 변경했습니다",</br>
-							  "phone": "01012341234"</br>
-							}
-							""")
+		description = """
+			★개인 상점 수정</br>
+			{
+			  "shopName": "지진마켓",</br>
+			  "description": "태풍마켓에서 변경했습니다",</br>
+			  "phone": "01012341234"</br>
+			}
+			""")
 	@PatchMapping("/myinfo")
 	public ResponseEntity<Void> patchMyInfo(@RequestBody UpdateMemberRequest updateMemberRequest,
 		@CurrentMember Member me) {

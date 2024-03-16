@@ -10,7 +10,7 @@ import static com.querydsl.jpa.JPAExpressions.*;
 import java.util.List;
 
 import com.codecrafter.typhoon.domain.response.PostShopResponse;
-import com.codecrafter.typhoon.domain.response.SimplePostResponse;
+import com.codecrafter.typhoon.domain.response.SimplePostDto;
 import com.codecrafter.typhoon.exception.NotExistException;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
@@ -38,7 +38,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 			throw new NotExistException();
 		}
 
-		List<SimplePostResponse> simplePostResponseList = queryFactory.select(constructor(SimplePostResponse.class,
+		List<SimplePostDto> simplePostDtoList = queryFactory.select(constructor(SimplePostDto.class,
 				post.id,
 				postImage.imagePath,
 				post.price
@@ -49,7 +49,7 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 			.limit(6)
 			.fetch();
 
-		postShopResponse.seTthumbnailAndPriceList(simplePostResponseList);
+		postShopResponse.seTthumbnailAndPriceList(simplePostDtoList);
 
 		return postShopResponse;
 	}

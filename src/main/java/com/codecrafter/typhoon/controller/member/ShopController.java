@@ -8,7 +8,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -57,19 +56,19 @@ public class ShopController {
 		return ResponseEntity.ok(postShop);
 	}
 
-	@Operation(summary = "내상점 수정",
-		description = """
-			★내상점정보 수정(상점명, 상점설명)</br>
-			MemberId = 숫자</br>
-			shopName = 상점명(문자) / description = 상점설명(문자)</br>
-			{</br>
-				"shopName": "천둥마켓",</br>
-				"description": "태풍마켓에서 변경."</br>
-			}
-			""")
-	@PutMapping("/{memberId}/shop")
-	public ResponseEntity<?> updateShop() {
-		return ResponseEntity.ok().body("updateShop");
-	}
+	// @Operation(summary = "내상점 수정",
+	// 	description = """
+	// 		★내상점정보 수정(상점명, 상점설명)</br>
+	// 		MemberId = 숫자</br>
+	// 		shopName = 상점명(문자) / description = 상점설명(문자)</br>
+	// 		{</br>
+	// 			"shopName": "천둥마켓",</br>
+	// 			"description": "태풍마켓에서 변경."</br>
+	// 		}
+	// 		""")
+	// @PutMapping("/{memberId}/shop")
+	// public ResponseEntity<?> updateShop() {
+	// 	return ResponseEntity.ok().body("updateShop");
+	// }
 
 }

@@ -65,9 +65,17 @@ spring:
           scope:
             - profile
             - account_email
+  data:
+    redis:
+      host: localhost
+      port: 6379
 file:
   base:
     dir: ${user.home}/fileStore/
+
+
+
+#Redis
 
 
 

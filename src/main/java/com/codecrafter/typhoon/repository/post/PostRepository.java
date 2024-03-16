@@ -28,8 +28,8 @@ public interface PostRepository extends JpaRepository<Post, Long>, PostRepositor
 
 	@Query(value = """
 		select p from Post p
-			inner join fetch p.postHashtagList ph  
-			inner join  fetch ph.hashtag h 
+			inner join fetch p.postHashtagList ph
+			inner join  fetch ph.hashtag h
 			 where p.id = :postId
 		""")
 	Optional<Post> findPostByIdWithHashTags(@Param("postId") Long postId);

@@ -3,7 +3,7 @@ package com.codecrafter.typhoon.domain.response;
 import lombok.Getter;
 
 @Getter
-public class SimplePostResponse {
+public class SimplePostDto {
 
 	private Long id;
 
@@ -11,7 +11,7 @@ public class SimplePostResponse {
 
 	private int price;
 
-	public SimplePostResponse(Long id, String thumbnailPath, int price) {
+	public SimplePostDto(Long id, String thumbnailPath, int price) {
 		this.id = id;
 		this.thumbnailPath = thumbnailPath;
 		this.price = price;
