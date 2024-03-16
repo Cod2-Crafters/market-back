@@ -4,6 +4,7 @@ import static org.springframework.data.domain.Sort.Direction.*;
 import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.*;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -26,6 +27,7 @@ import com.codecrafter.typhoon.domain.request.HashtagsRequest;
 import com.codecrafter.typhoon.domain.request.post.ImageRequest;
 import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
 import com.codecrafter.typhoon.domain.request.post.PostUpdateRequest;
+import com.codecrafter.typhoon.domain.response.SimplePostDto;
 import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
 import com.codecrafter.typhoon.domain.response.post.SimplePostResponse;
 import com.codecrafter.typhoon.service.FileService;
@@ -60,7 +62,7 @@ public class PostController {
 		PostDetailResponse postDetail = postService.getPostDetail(postId);
 		String clientIp = request.getRemoteAddr().replace(":", "");
 		Long viewCount = redisService.increaseDailyPostViewCount(postId, clientIp);
-		postDetail.setViewCount(viewCount);
+		postDetail.setTodayViewCount(viewCount);
 		return ResponseEntity.ok().body(postDetail);
 	}
 
@@ -144,7 +146,7 @@ public class PostController {
 		return ResponseEntity.ok().body("add hashtags success");
 	}
 
-	@Operation(summary = "해쉬태그 추가",
+	@Operation(summary = "해쉬태그 삭제",
 		description = """
 			★상품에대해 해쉬태그 다/단건 삭제</br>
 			PostId = 숫자 / hashTagList = 해쉬태그번호?
@@ -190,6 +192,17 @@ public class PostController {
 	public ResponseEntity<?> deletePost(@PathVariable Long postId) {
 		postService.deletePost(postId);
 		return ResponseEntity.ok().body("sucess");
+	}
+
+	@Operation(summary = "오늘 가장 많이 조회된 항목",
+		description = """
+				오늘 가장 많이 조회된 상품 ?개 (기본10)
+			""")
+	@GetMapping("/today-best-post")
+	public ResponseEntity<?> getMostViewedItemsToday(@RequestParam(required = false, defaultValue = "10") long limit) {
+		List<Long> postIdList = redisService.getMostViewedItemsToday(limit);
+		List<SimplePostDto> simplePostDtoList = postService.getSimplePostDtoList(postIdList);
+		return ResponseEntity.ok(simplePostDtoList);
 	}
 
 }

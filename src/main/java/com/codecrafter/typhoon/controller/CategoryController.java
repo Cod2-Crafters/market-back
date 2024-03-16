@@ -3,6 +3,7 @@ package com.codecrafter.typhoon.controller;
 import java.util.List;
 
 import io.swagger.v3.oas.annotations.Operation;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -28,10 +29,10 @@ public class CategoryController {
 	// }
 
 	@Operation(summary = "카테고리 개수 조회",
-			description = 	"""
-      						★카테고리 총 개수 조회</br>
-      						{host}/api/category/list
-							""")
+		description = """
+								★카테고리 총 개수 조회</br>
+								{host}/api/category/list
+			""")
 	@GetMapping("/list")
 	public ResponseEntity<List<CategoryCountResponse>> getAllWithCount() {
 		List<CategoryCountResponse> allWithPostCount = categoryService.getAllWithPostCount();

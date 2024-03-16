@@ -1,6 +1,8 @@
 package com.codecrafter.typhoon.service;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -9,7 +11,9 @@ import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import com.codecrafter.typhoon.domain.dto.ViewCountDto;
 import com.codecrafter.typhoon.domain.entity.PostViewCount;
+import com.codecrafter.typhoon.exception.NotExistException;
 import com.codecrafter.typhoon.repository.PostViewCountRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -92,4 +96,29 @@ public class RedisService {
 		//TODO Zset 초기화, 조회수 상품에 추가 등등
 	}
 
+	/**
+	 * 오늘 가장 많이 팔린 상품 n개를 가지고오기
+	 *
+	 * @param limit 가기져올 상위 n개
+	 * @return ViewCountDto {@link ViewCountDto}
+	 */
+	public List<Long> getMostViewedItemsToday(long limit) {
+		Set<ZSetOperations.TypedTuple<String>> typedTuples = redisTemplate.opsForZSet()
+			.rangeWithScores(DAILY_POST_VIEW_COUNT, 0, limit - 1);
+		if (typedTuples == null) {
+			throw new NotExistException("오늘 단 하나의 조회도 발생하지 않았음!!!!!");
+		}
+		List<Long> postIdList = typedTuples.stream()
+			.mapToLong(t -> {
+				try {
+					return Long.parseLong(Objects.requireNonNull(t.getValue()));
+				} catch (Exception e) {
+					log.error("error in change to Long", e);
+					return -100L; // 변환에 실패한 경우 0L을 반환합니다.
+				}
+			})
+			.filter((v) -> v != -1L)
+			.boxed().toList();
+		return postIdList;
+	}
 }

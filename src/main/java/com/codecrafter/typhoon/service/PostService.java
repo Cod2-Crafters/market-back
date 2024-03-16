@@ -16,6 +16,7 @@ import com.codecrafter.typhoon.domain.request.HashtagsRequest;
 import com.codecrafter.typhoon.domain.request.post.ImageRequest;
 import com.codecrafter.typhoon.domain.request.post.PostCreateRequest;
 import com.codecrafter.typhoon.domain.request.post.PostUpdateRequest;
+import com.codecrafter.typhoon.domain.response.SimplePostDto;
 import com.codecrafter.typhoon.domain.response.post.PostDetailResponse;
 import com.codecrafter.typhoon.domain.response.post.SimplePostResponse;
 import com.codecrafter.typhoon.exception.NoPostException;
@@ -81,7 +82,7 @@ public class PostService {
 	}
 
 	/**
-	 * SimplePostResponse 상세조회 로직
+	 * SimplePostDto 상세조회 로직
 	 *
 	 * @param postId
 	 * @return PostDetailResponse
@@ -97,7 +98,7 @@ public class PostService {
 		postDetailResponse.setHashtagList(hashtagList);
 
 		Long totalPostViewCount = postRepository.getTotalPostViewCount(postId);
-		postDetailResponse.setViewCount(totalPostViewCount);
+		postDetailResponse.setTotalViewCount(totalPostViewCount);
 
 		int bookmarkCount = bookmarkRepository.countByPostId(postId);
 		postDetailResponse.setBookmarkCount(bookmarkCount);
@@ -184,4 +185,7 @@ public class PostService {
 			.removeIf(postImage -> postImage.getId() == postImageId);
 	}
 
+	public List<SimplePostDto> getSimplePostDtoList(List<Long> postIdList) {
+		return postRepository.getSimplePostDtoList(postIdList);
+	}
 }

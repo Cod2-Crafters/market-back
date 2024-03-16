@@ -23,7 +23,7 @@ public class PostShopResponse {
 
 	private Long followerCount;
 
-	private List<SimplePostResponse> simplePostResponseList = new ArrayList<>();
+	private List<SimplePostDto> simplePostDtoList = new ArrayList<>();
 
 	public PostShopResponse(Long memberId, String shopName, String logoPath, Long postCount, Long followerCount) {
 		this.memberId = memberId;
@@ -33,7 +33,7 @@ public class PostShopResponse {
 		this.followerCount = followerCount;
 	}
 
-	public void seTthumbnailAndPriceList(List<SimplePostResponse> simplePostResponseList) {
-		this.simplePostResponseList = simplePostResponseList;
+	public void seTthumbnailAndPriceList(List<SimplePostDto> simplePostDtoList) {
+		this.simplePostDtoList = simplePostDtoList;
 	}
 }
