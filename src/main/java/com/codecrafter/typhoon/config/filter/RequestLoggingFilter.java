@@ -28,6 +28,11 @@ public class RequestLoggingFilter implements Filter {
 			}
 			String ipAddress = request.getRemoteAddr();
 			log.info("\bRequest from IP: {} to URL: {}", ipAddress, fullUrl.toString());
+
+			String xForwardedForHeader = httpServletRequest.getHeader("X-Forwarded-For");
+			if (xForwardedForHeader != null && !xForwardedForHeader.isEmpty()) {
+				log.info("X-Forwarded-For={}", xForwardedForHeader);
+			}
 		}
 
 		chain.doFilter(request, response);

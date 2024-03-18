@@ -27,8 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RedisService {
 
-	private final String POST_VISIT_IP_KEY_10m = "post:%s:visit10m:ip:%s";
-
 	private static final String DAILY_POST_VIEW_COUNT = "daily:post:view:count:";
 
 	private final PostViewCountRepository postViewCountRepository;
@@ -57,7 +55,7 @@ public class RedisService {
 	 * @return
 	 */
 	private boolean hasNotVisitedInLast10m(Long postId, String clientIp) {
-		String key = POST_VISIT_IP_KEY_10m + postId + ":" + clientIp;
+		String key = "post:%s:visit10m:ip:%s".formatted(postId, clientIp);
 		Boolean visited = redisTemplate.opsForValue().setIfAbsent(key, "0", 10, TimeUnit.MINUTES);
 		//TODO: return visited;
 		return true;
