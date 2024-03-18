@@ -60,7 +60,7 @@ public class PostController {
 	@GetMapping("/{postId}")
 	public ResponseEntity<PostDetailResponse> getPostDetail(@PathVariable Long postId, HttpServletRequest request) {
 		PostDetailResponse postDetail = postService.getPostDetail(postId);
-		String clientIp = request.getRemoteAddr().replace(":", "");
+		String clientIp = request.getRemoteAddr().replace(":", "");  //TODO X-Forwarded-For로 변경 필요
 		Long viewCount = redisService.increaseDailyPostViewCount(postId, clientIp);
 		postDetail.setTodayViewCount(viewCount);
 		return ResponseEntity.ok().body(postDetail);
