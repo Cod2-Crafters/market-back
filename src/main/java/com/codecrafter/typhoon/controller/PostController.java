@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.codecrafter.typhoon.aop.CheckOwner;
 import com.codecrafter.typhoon.config.resolver.CurrentMember;
+import com.codecrafter.typhoon.domain.SearchCondition;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.request.HashtagsRequest;
 import com.codecrafter.typhoon.domain.request.post.ImageRequest;
@@ -36,6 +37,7 @@ import com.codecrafter.typhoon.service.RedisService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -99,7 +101,8 @@ public class PostController {
 			}
 			""")
 	@PostMapping("/")
-	public ResponseEntity<URI> createPost(@RequestBody PostCreateRequest postCreateRequest, @CurrentMember Member me) {
+	public ResponseEntity<URI> createPost(@Valid @RequestBody PostCreateRequest postCreateRequest,
+		@CurrentMember Member me) {
 		Long postId = postService.createPost(postCreateRequest, me);
 		URI uri = fromCurrentRequest()
 			.path("/{id}")
@@ -205,4 +208,11 @@ public class PostController {
 		return ResponseEntity.ok(simplePostDtoList);
 	}
 
+	@GetMapping("/search")
+	public ResponseEntity<?> Search(@Valid SearchCondition searchCondition,
+		@PageableDefault(size = 1, page = 0, sort = "id", direction = DESC) Pageable pageable
+	) {
+		postService.search(searchCondition, pageable);
+		return ResponseEntity.ok("test");
+	}
 }

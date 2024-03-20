@@ -1,8 +1,12 @@
 package com.codecrafter.typhoon;
 
+import org.springframework.util.StringUtils;
+
 public class CustomUtils {
 
 	public static String getChosungString(String str) {
+		if (!StringUtils.hasText(str))
+			return null;
 		char[] charArray = str.toCharArray();
 		StringBuilder res = new StringBuilder();
 		for (char c : charArray) {

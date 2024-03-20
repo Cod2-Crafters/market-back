@@ -12,12 +12,17 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.codecrafter.typhoon.domain.SearchCondition;
 import com.codecrafter.typhoon.domain.entity.Category;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.entity.Post;
 import com.codecrafter.typhoon.domain.entity.PostImage;
+import com.codecrafter.typhoon.domain.enumeration.LoginType;
 import com.codecrafter.typhoon.domain.enumeration.PostStatus;
 import com.codecrafter.typhoon.domain.request.HashtagsRequest;
 import com.codecrafter.typhoon.domain.request.post.ImageRequest;
@@ -215,4 +220,44 @@ class PostServiceTest {
 
 	}
 
+	@Test
+	@Transactional
+	void test7() {
+
+		Member m = Member.builder()
+			.email("test@test.com")
+			.loginType(LoginType.KAKAO)
+			.password("abcd")
+			.description("description")
+			.shopName("sshopNames")
+			.realName("mytest")
+			.build();
+		Member member = memberRepository.save(m);
+		Post post = Post.builder()
+			.price(100)
+			.title("this is title")
+			.content("this is content")
+			.member(member)
+			.build();
+
+		postRepository.save(post);
+		em.flush();
+		em.clear();
+		SearchCondition searchCondition = new SearchCondition(
+			null,
+			"is title ",
+			null,
+			0L,
+			null,
+			null,
+			null,
+			null,
+			null,
+			null,
+			"ㅂㅂ"
+		);
+		Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+
+		postService.search(searchCondition, pageable);
+	}
 }
