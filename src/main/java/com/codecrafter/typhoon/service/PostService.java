@@ -191,8 +191,9 @@ public class PostService {
 		return postRepository.getSimplePostDtoList(postIdList);
 	}
 
-	public void search(SearchCondition searchCondition, Pageable pageable) {
+	public Slice<?> search(SearchCondition searchCondition, Pageable pageable) {
 		Slice<Post> search = postRepository.search(searchCondition, pageable);
-		System.out.println("search = " + search);
+		return search.map(SimplePostResponse::new);
+
 	}
 }

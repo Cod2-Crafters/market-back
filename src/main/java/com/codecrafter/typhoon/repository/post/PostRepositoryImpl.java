@@ -107,7 +107,6 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
 	private BooleanBuilder searchConditionBuilder(SearchCondition searchCondition) {
 		BooleanBuilder builder = new BooleanBuilder();
-		builder.and(postIdEq(searchCondition.postId()));
 		builder.and(postTitleLike(searchCondition.postTitle()));
 		builder.and(postStatusEq(searchCondition.postStatus()));
 		builder.and(minPriceGoe(searchCondition.minPrice()));
@@ -126,7 +125,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 	}
 
 	private BooleanExpression postTitleLike(String postTitle) {
-		return postTitle != null ? post.title.like("%" + postTitle + "%") : null;
+		return StringUtils.hasText(postTitle) ? post.title.like("%" + postTitle + "%") : null;
 	}
 
 	private BooleanExpression postStatusEq(PostStatus postStatus) {
@@ -154,7 +153,7 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 	}
 
 	private BooleanExpression shopNameEq(String shopName) {
-		return shopName != null ? post.member.shopName.eq(shopName) : null;
+		return StringUtils.hasText(shopName) ? post.member.shopName.eq(shopName) : null;
 	}
 
 	private BooleanExpression categoryIdEq(Long categoryId) {

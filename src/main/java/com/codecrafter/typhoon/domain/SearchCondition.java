@@ -6,14 +6,15 @@ import com.codecrafter.typhoon.domain.enumeration.PostStatus;
 
 import jakarta.validation.constraints.Min;
 
+/**
+ * 검색조건
+ */
 public record SearchCondition(
-
-	/* 계시글번호*/
-	Long postId,
 
 	/* 계시글제목*/
 	String postTitle,
 
+	/* 계시글상태 */
 	PostStatus postStatus,
 
 	/* 최소가격 */

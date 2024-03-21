@@ -212,7 +212,7 @@ public class PostController {
 	public ResponseEntity<?> Search(@Valid SearchCondition searchCondition,
 		@PageableDefault(size = 1, page = 0, sort = "id", direction = DESC) Pageable pageable
 	) {
-		postService.search(searchCondition, pageable);
-		return ResponseEntity.ok("test");
+		Slice<?> search = postService.search(searchCondition, pageable);
+		return ResponseEntity.ok(search);
 	}
 }

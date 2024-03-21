@@ -2,6 +2,7 @@ package com.codecrafter.typhoon.service;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -14,11 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.codecrafter.typhoon.domain.SearchCondition;
 import com.codecrafter.typhoon.domain.entity.Category;
+import com.codecrafter.typhoon.domain.entity.Hashtag;
 import com.codecrafter.typhoon.domain.entity.Member;
 import com.codecrafter.typhoon.domain.entity.Post;
 import com.codecrafter.typhoon.domain.entity.PostImage;
@@ -239,25 +242,32 @@ class PostServiceTest {
 			.content("this is content")
 			.member(member)
 			.build();
+		Category category = categoryRepository.save(new Category(1L, "test"));
+		post.setCategory(category);
+		Hashtag hashtag = new Hashtag("test");
+		hashtagRepository.save(hashtag);
+		post.addPostHashtag(hashtag);
 
 		postRepository.save(post);
 		em.flush();
 		em.clear();
 		SearchCondition searchCondition = new SearchCondition(
-			null,
-			"is title ",
-			null,
-			0L,
-			null,
-			null,
-			null,
-			null,
-			null,
-			null,
-			"ㅂㅂ"
+			"is title",
+			PostStatus.ON_SALE,
+			99L,
+			101L,
+			LocalDateTime.now().minusDays(1),
+			LocalDateTime.now().plusDays(1),
+			member.getId(),
+			member.getShopName(),
+			category.getId(),
+			hashtag.getTagName()
 		);
-		Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createdAt"));
+		Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "createdAt", "id"));
 
-		postService.search(searchCondition, pageable);
+		Slice<?> search = postService.search(searchCondition, pageable);
+		System.out.println("search.getContent() = " + search.getContent());
+		assertThat(search.getContent().size()).isEqualTo(1);
+
 	}
 }

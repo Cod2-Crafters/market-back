@@ -160,4 +160,22 @@ class PostControllerTest {
 		System.out.println("postIdList = " + postIdList);
 	}
 
+	@Test
+	@DisplayName("search테스트")
+	void test4() throws Exception {
+		mockMvc.perform(get("/api/post/search")
+				.param("postStatus", "ON_SALE")
+				.param("minPrice", "1000")
+				.param("maxPrice", "100000")
+				.param("tagName", "abc")
+				.param("page", "1")
+				.param("size", "10")
+				.param("sort", "id,desc")
+				.param("postTitle", "this is title")
+				.param("shopName", "mockshopname")
+				.param("categoryId", "0")
+			).andExpect(status().isOk())
+			.andDo(MockMvcResultHandlers.print());
+	}
+
 }
