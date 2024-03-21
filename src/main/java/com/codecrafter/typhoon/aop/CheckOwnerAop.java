@@ -6,6 +6,9 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionStatus;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.codecrafter.typhoon.config.MockPrincipal;
 import com.codecrafter.typhoon.domain.entity.Post;
@@ -26,10 +29,16 @@ public class CheckOwnerAop {
 
 	private final PostRepository postRepository;
 
+	private final PlatformTransactionManager tr;
+
 	@Around("@annotation(CheckOwner) && args(postId,..)")
 	public Object checkPostOwner(ProceedingJoinPoint joinPoint, Long postId) throws Throwable {
 		log.info("test");
-		MockPrincipal principal = (MockPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		TransactionStatus status = tr.getTransaction(def);
+		MockPrincipal principal = (MockPrincipal)SecurityContextHolder.getContext()
+			.getAuthentication()
+			.getPrincipal();
 
 		Post post = postRepository.findById(postId).orElseThrow(NoPostException::new);
 		if (!post.getMember().getId().equals(principal.getId())) {
@@ -37,8 +46,8 @@ public class CheckOwnerAop {
 		}
 		Object result = joinPoint.proceed();
 		log.info("test");
+		tr.commit(status);
 		return result;
-
 	}
 
 }

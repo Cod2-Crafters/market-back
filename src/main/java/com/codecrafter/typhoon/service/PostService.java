@@ -7,6 +7,7 @@ import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.codecrafter.typhoon.domain.SearchCondition;
 import com.codecrafter.typhoon.domain.entity.Category;
 import com.codecrafter.typhoon.domain.entity.Hashtag;
 import com.codecrafter.typhoon.domain.entity.Member;
@@ -117,6 +118,7 @@ public class PostService {
 	 * @param postUpdateRequest 업데이트 dto 객체
 	 * @return postID
 	 */
+	@Transactional(readOnly = true)
 	public Long updatePost(Long postId, PostUpdateRequest postUpdateRequest) {
 		Post post = postRepository.findById(postId)
 			.orElseThrow(NoPostException::new);
@@ -187,5 +189,11 @@ public class PostService {
 
 	public List<SimplePostDto> getSimplePostDtoList(List<Long> postIdList) {
 		return postRepository.getSimplePostDtoList(postIdList);
+	}
+
+	public Slice<?> search(SearchCondition searchCondition, Pageable pageable) {
+		Slice<Post> search = postRepository.search(searchCondition, pageable);
+		return search.map(SimplePostResponse::new);
+
 	}
 }
