@@ -209,10 +209,10 @@ public class PostController {
 	}
 
 	@GetMapping("/search")
-	public ResponseEntity<?> Search(@Valid SearchCondition searchCondition,
+	public ResponseEntity<Slice<SimplePostResponse>> Search(@Valid SearchCondition searchCondition,
 		@PageableDefault(size = 1, page = 0, sort = "id", direction = DESC) Pageable pageable
 	) {
-		Slice<?> search = postService.search(searchCondition, pageable);
+		Slice<SimplePostResponse> search = postService.search(searchCondition, pageable);
 		return ResponseEntity.ok(search);
 	}
 }

@@ -77,8 +77,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 
 	@Override
 	public Slice<Post> search(SearchCondition searchCondition, Pageable pageable) {
+
 		BooleanBuilder builder = searchConditionBuilder(searchCondition);
 		List<OrderSpecifier<?>> orderSpecifierList = getPostOrderSpecifier(pageable);
+
+		boolean hasNext = false;
 
 		List<Post> fetch = queryFactory
 			.selectFrom(post)
@@ -87,7 +90,11 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
 			.offset(pageable.getOffset())
 			.limit(pageable.getPageSize() + 1)
 			.fetch();
-		return new SliceImpl<Post>(fetch, pageable, fetch.size() > pageable.getPageSize());
+		if (fetch.size() > pageable.getPageSize()) {
+			hasNext = true;
+			fetch = fetch.subList(0, pageable.getPageSize());
+		}
+		return new SliceImpl<>(fetch, pageable, hasNext);
 	}
 
 	private List<OrderSpecifier<?>> getPostOrderSpecifier(Pageable pageable) {

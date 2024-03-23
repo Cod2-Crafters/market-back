@@ -31,6 +31,9 @@ public class MemberResolver implements HandlerMethodArgumentResolver {
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
 		NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
 		log.info("test");
+		if (SecurityContextHolder.getContext().getAuthentication().getPrincipal().equals("anonymousUser")) {
+			throw new NoMemberException();
+		}
 		MockPrincipal principal = (MockPrincipal)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Member member = memberRepository.findById(principal.getId()).orElseThrow(NoMemberException::new);
 		return member;
