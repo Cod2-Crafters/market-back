@@ -4,6 +4,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -33,21 +34,28 @@ public class CheckOwnerAop {
 
 	@Around("@annotation(CheckOwner) && args(postId,..)")
 	public Object checkPostOwner(ProceedingJoinPoint joinPoint, Long postId) throws Throwable {
-		log.info("test");
+
+		log.info("checkOwnerAop");
+
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 		TransactionStatus status = tr.getTransaction(def);
-		MockPrincipal principal = (MockPrincipal)SecurityContextHolder.getContext()
-			.getAuthentication()
-			.getPrincipal();
+		try {
+			MockPrincipal principal = (MockPrincipal)SecurityContextHolder.getContext()
+				.getAuthentication()
+				.getPrincipal();
 
-		Post post = postRepository.findById(postId).orElseThrow(NoPostException::new);
-		if (!post.getMember().getId().equals(principal.getId())) {
-			throw new AccessDeniedException("권한이 없다고");
+			Post post = postRepository.findById(postId).orElseThrow(NoPostException::new);
+			if (!post.getMember().getId().equals(principal.getId())) {
+				throw new AccessDeniedException("권한이 없다고");
+			}
+			Object result = joinPoint.proceed();
+			log.info("test");
+			tr.commit(status);
+			return result;
+		} catch (Throwable e) {
+
+			throw new BadCredentialsException("권한이 없습니다.");
 		}
-		Object result = joinPoint.proceed();
-		log.info("test");
-		tr.commit(status);
-		return result;
 	}
 
 }
