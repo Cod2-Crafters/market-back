@@ -35,7 +35,7 @@ public class FollowService {
 		if (followRepository.existsByFollowerAndFollowing(following, me)) {
 			throw new AlreadyExistException("이미 팔로우하고 있음!!");
 		}
-		Follow follow = newFollow(following, me);
+		Follow follow = newFollow(me, following);
 		followRepository.save(follow);
 	}
 
