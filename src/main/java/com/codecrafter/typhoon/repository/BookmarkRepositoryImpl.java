@@ -20,11 +20,11 @@ public class BookmarkRepositoryImpl implements BookmarkRepositoryCustom {
 	public List<BookmarkResponse> getMyBookmarkList(Long memberId) {
 		List<BookmarkResponse> bookmarkResponseList = queryFactory
 			.select(Projections.constructor(BookmarkResponse.class,
-				bookmark.id, post.id, post.title, postImage
+				bookmark.id, post.id, post.title, postImage.imagePath
 			))
 			.from(bookmark)
 			.join(bookmark.post, post)
-			.leftJoin(post, postImage.post).on(postImage.isThumbnail.eq(true))
+			.leftJoin(postImage).on(postImage.post.eq(post).and(postImage.isThumbnail.eq(true)))
 			.where(bookmark.member.id.eq(memberId))
 			.limit(100)
 			.fetch();

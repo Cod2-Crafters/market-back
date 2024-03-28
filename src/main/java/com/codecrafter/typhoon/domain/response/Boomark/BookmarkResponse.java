@@ -1,8 +1,10 @@
 package com.codecrafter.typhoon.domain.response.Boomark;
 
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@Getter
 public class BookmarkResponse {
 
 	private Long bookmarkId;
